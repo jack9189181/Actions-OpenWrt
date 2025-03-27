@@ -22,6 +22,10 @@ on:
         options:
           - https://github.com/VIKINGYFY/immortalwrt
           - https://xxxx
+      REPO:
+        description: '分支'
+        required: true
+        default: 'main'
       CONFIG_PATH:
         type: choice
         description: '配置文件路径'
@@ -54,7 +58,7 @@ env:
   REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: JDCloud-Taiyi-VIKINGYFY/.config
+  CONFIG_FILE: ${{github.event.inputs.CONFIG_PATH}}
   DIY_P1_SH: JDCloud-Taiyi-VIKINGYFY/diy-part1.sh
   DIY_P2_SH: JDCloud-Taiyi-VIKINGYFY/diy-part1.sh
   SSH_ACTIONS: false
