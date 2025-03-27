@@ -23,6 +23,8 @@ fi
 #测试
 if [ -d *"test1"* ]; then
     echo "有"
+    cd $PKG_PATH
+    ls $PKG_PATH
 else
     echo "无"
 fi
