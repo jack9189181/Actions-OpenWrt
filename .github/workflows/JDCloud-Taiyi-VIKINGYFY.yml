@@ -44,6 +44,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
+  SET_IP: ${{ github.event.inputs.LAN_IP }}
 
 jobs:
   build:

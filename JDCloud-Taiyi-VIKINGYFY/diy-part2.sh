@@ -13,15 +13,15 @@
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 ##-----------------Add dev core for kenzo OpenClash------------------
-curl -sL -m 30 --retry 2 https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-arm64.tar.gz -o /tmp/clash.tar.gz
-tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
-chmod +x /tmp/clash >/dev/null 2>&1
-mkdir -p package/kenzo/luci-app-openclash/root/etc/openclash/core
-mv /tmp/clash package/kenzo/luci-app-openclash/root/etc/openclash/core/clash >/dev/null 2>&1
-rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
+# curl -sL -m 30 --retry 2 https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-arm64.tar.gz -o /tmp/clash.tar.gz
+# tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
+# chmod +x /tmp/clash >/dev/null 2>&1
+# mkdir -p package/kenzo/luci-app-openclash/root/etc/openclash/core
+# mv /tmp/clash package/kenzo/luci-app-openclash/root/etc/openclash/core/clash >/dev/null 2>&1
+# rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
+PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 
 # Modify default IP
-SET_IP=${{ github.event.inputs.LAN_IP }}
 if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
 	#修改immortalwrt.lan关联IP
 	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" $(find feeds/luci/modules/luci-mod-system -type f -name "flash.js")
@@ -29,10 +29,10 @@ if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[
 	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" package/base-files/files/bin/config_generate
 	echo "Set LAN IP Address: $SET_IP"
 else
-	echo "Invalid IP address, use default:$SET_IP "
+	echo "Invalid IP address, use default."
 fi
 
-PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
+
 #修改argon主题字体和颜色
 if [ -d *"luci-theme-argon"* ]; then
 	cd ./luci-theme-argon/
