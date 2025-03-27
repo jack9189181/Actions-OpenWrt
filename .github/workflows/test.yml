@@ -15,15 +15,24 @@ on:
   workflow_dispatch:
     inputs:
       SOURCE_URL:
-        description: 'SOURCE'
+        type: choice
+        description: '源码'
         required: true
         default: 'https://github.com/VIKINGYFY/immortalwrt'
+        options:
+          - https://github.com/VIKINGYFY/immortalwrt
+          - https://xxxx
       CONFIG_PATH:
+        type: choice
         description: '配置文件路径'
         required: true
         default: 'JDCloud-Taiyi-VIKINGYFY/.config'
+        options:
+          - JDCloud-Taiyi-VIKINGYFY/.config
+          - test1
+          - test2
       LAN_IP:
-        description: 'Set LAN IP Address'
+        description: '路由器登录地址'
         required: true
         default: '192.168.8.1'
       NO_DOCKERMAN:
