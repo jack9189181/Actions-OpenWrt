@@ -29,7 +29,7 @@ if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[
 	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" package/base-files/files/bin/config_generate
 	echo "Set LAN IP Address: $SET_IP"
 else
-	echo "Invalid IP address, use default."
+	echo "Invalid IP address, use default:$SET_IP "
 fi
 
 PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
@@ -41,6 +41,8 @@ if [ -d *"luci-theme-argon"* ]; then
 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
 
 	cd $PKG_PATH && echo "theme-argon has been fixed!"
+else
+	echo "theme is not fixed!"
 fi
 
 #修改qca-nss-drv启动顺序
@@ -49,6 +51,8 @@ if [ -f "$NSS_DRV" ]; then
 	sed -i 's/START=.*/START=85/g' $NSS_DRV
 
 	cd $PKG_PATH && echo "qca-nss-drv has been fixed!"
+else
+	echo "err"
 fi
 
 #修改qca-nss-pbuf启动顺序
@@ -57,6 +61,8 @@ if [ -f "$NSS_PBUF" ]; then
 	sed -i 's/START=.*/START=86/g' $NSS_PBUF
 
 	cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
+else
+	echo "err"
 fi
 
 # #修复Coremark编译失败
