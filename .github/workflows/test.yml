@@ -14,6 +14,14 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
+      SOURCE_URL:
+        description: 'SOURCE'
+        required: true
+        default: 'https://github.com/VIKINGYFY/immortalwrt'
+      CONFIG_PATH:
+        description: '配置文件路径'
+        required: true
+        default: 'JDCloud-Taiyi-VIKINGYFY/.config'
       LAN_IP:
         description: 'Set LAN IP Address'
         required: true
@@ -34,12 +42,12 @@ env:
   ###############手动修改##############
   OPENWRT_NAME: VIKINGYFY
   UPLOAD_TAG_NAME: Taiyi
-  REPO_URL: https://github.com/VIKINGYFY/immortalwrt
+  REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: JDCloud-Taiyi-VIKINGYFY/.config
   DIY_P1_SH: JDCloud-Taiyi-VIKINGYFY/diy-part1.sh
-  DIY_P2_SH: JDCloud-Taiyi-VIKINGYFY/test.sh
+  DIY_P2_SH: JDCloud-Taiyi-VIKINGYFY/diy-part1.sh
   SSH_ACTIONS: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
