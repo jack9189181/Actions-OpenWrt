@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 ###############手动修改##############
-name: JDCloud-Taiyi-VIKINGYFY
+name: test
 
 on:
   repository_dispatch:
