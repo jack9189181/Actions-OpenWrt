@@ -14,14 +14,36 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
+      SOURCE_URL:
+        type: choice
+        description: '源码'
+        required: true
+        default: 'https://github.com/VIKINGYFY/immortalwrt'
+        options:
+          - https://github.com/VIKINGYFY/immortalwrt
+          - https://xxxx
+      BRANCH:
+        description: '分支(请输入正确的分支)'
+        required: true
+        default: 'main'
+        type: string
+      CONFIG_PATH:
+        type: choice
+        description: '配置文件路径'
+        required: true
+        default: 'Config/JDCloud-Taiyi.config'
+        options:
+          - Config/JDCloud-Taiyi.config
+          - test1
+          - test2
       LAN_IP:
-        description: 'Set LAN IP Address'
+        description: '路由器登录地址'
         required: true
         default: '192.168.8.1'
       NO_DOCKERMAN:
         description: 'Not build luci-app-dockerman'
         required: true
-        default: false
+        default: true
         type: boolean
       ssh:
         description: 'SSH connection to Actions'
@@ -34,12 +56,12 @@ env:
   ###############手动修改##############
   OPENWRT_NAME: VIKINGYFY
   UPLOAD_TAG_NAME: Taiyi
-  REPO_URL: https://github.com/VIKINGYFY/immortalwrt
-  REPO_BRANCH: main
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: JDCloud-Taiyi-VIKINGYFY/.config
-  DIY_P1_SH: JDCloud-Taiyi-VIKINGYFY/diy-part1.sh
-  DIY_P2_SH: JDCloud-Taiyi-VIKINGYFY/diy-part2.sh
+  REPO_URL: ${{github.event.inputs.SOURCE_URL}}
+  REPO_BRANCH: ${{github.event.inputs.BRANCH}}
+  CONFIG_FILE: ${{github.event.inputs.CONFIG_PATH}}
+  DIY_P1_SH: Scripts/diy-part1.sh
+  DIY_P2_SH: Scripts/diy-part2.sh
   SSH_ACTIONS: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true

@@ -31,9 +31,9 @@ on:
         type: choice
         description: '配置文件路径'
         required: true
-        default: 'JDCloud-Taiyi-VIKINGYFY/.config'
+        default: 'Config/JDCloud-Taiyi.config'
         options:
-          - JDCloud-Taiyi-VIKINGYFY/.config
+          - Config/JDCloud-Taiyi.config
           - test1
           - test2
       LAN_IP:
