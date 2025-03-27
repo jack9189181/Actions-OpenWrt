@@ -21,7 +21,7 @@ else
 fi
 
 #测试
-if [ -d *"test"* ]; then
+if [ -d *"test1"* ]; then
     echo "有"
 else
     echo "无"
