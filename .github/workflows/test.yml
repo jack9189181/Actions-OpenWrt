@@ -104,8 +104,10 @@ jobs:
     - name: 更新 & 安装 feeds
       run: |
         cd openwrt
-        ./scripts/feeds update -a
-        ./scripts/feeds install -a
+        mkdir test
+        echo "创建成功"
+        # ./scripts/feeds update -a
+        # ./scripts/feeds install -a
 
     - name: 加载config & DIY_P2_SH
       run: |

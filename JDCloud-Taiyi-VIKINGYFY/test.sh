@@ -20,6 +20,12 @@ else
 	echo "Invalid IP address, use default."
 fi
 
+#测试
+if [ -d *"test"* ]; then
+    echo "有"
+else
+    echo "无"
+fi
 
 # #修改argon主题字体和颜色
 # if [ -d *"luci-theme-argon"* ]; then
