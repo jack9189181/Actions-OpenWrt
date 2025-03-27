@@ -20,7 +20,19 @@ mkdir -p package/kenzo/luci-app-openclash/root/etc/openclash/core
 mv /tmp/clash package/kenzo/luci-app-openclash/root/etc/openclash/core/clash >/dev/null 2>&1
 rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
-PKG_PATH="$GITHUB_WORKSPACE/wrt/package/"
+# Modify default IP
+SET_IP=${{ github.event.inputs.LAN_IP }}
+if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
+	#修改immortalwrt.lan关联IP
+	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" $(find feeds/luci/modules/luci-mod-system -type f -name "flash.js")
+	#修改默认IP地址
+	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" package/base-files/files/bin/config_generate
+	echo "Set LAN IP Address: $SET_IP"
+else
+	echo "Invalid IP address, use default."
+fi
+
+PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 #修改argon主题字体和颜色
 if [ -d *"luci-theme-argon"* ]; then
 	cd ./luci-theme-argon/
@@ -47,10 +59,10 @@ if [ -f "$NSS_PBUF" ]; then
 	cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
 fi
 
-#修复Coremark编译失败
-CM_FILE=$(find ../feeds/packages/ -maxdepth 3 -type f -wholename "*/coremark/Makefile")
-if [ -f "$CM_FILE" ]; then
-	sed -i 's/mkdir/mkdir -p/g' $CM_FILE
+# #修复Coremark编译失败
+# CM_FILE=$(find ../feeds/packages/ -maxdepth 3 -type f -wholename "*/coremark/Makefile")
+# if [ -f "$CM_FILE" ]; then
+# 	sed -i 's/mkdir/mkdir -p/g' $CM_FILE
 
-	cd $PKG_PATH && echo "coremark has been fixed!"
-fi
+# 	cd $PKG_PATH && echo "coremark has been fixed!"
+# fi
