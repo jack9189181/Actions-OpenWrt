@@ -126,13 +126,17 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
+    - name: Custom Packages(自定义包)
+        run: |
+          cd openwrt/package/
+          chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
+          $GITHUB_WORKSPACE/Scripts/Packages.sh
+
     - name: 加载config & DIY_P2_SH
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH
-        chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
         cd openwrt
-        $GITHUB_WORKSPACE/Scripts/Packages.sh
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 取消编译dockerman
