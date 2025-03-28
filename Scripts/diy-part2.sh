@@ -20,8 +20,6 @@
 # mv /tmp/clash package/kenzo/luci-app-openclash/root/etc/openclash/core/clash >/dev/null 2>&1
 # rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
-PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
-
 # Modify default IP
 if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
 	#修改immortalwrt.lan关联IP
@@ -33,6 +31,8 @@ else
 	echo "Invalid IP address, use default."
 fi
 
+PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
+cd $PKG_PATH
 
 #修改argon主题字体和颜色
 if [ -d *"luci-theme-argon"* ]; then
