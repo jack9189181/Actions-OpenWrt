@@ -1,0 +1,74 @@
+#CI项目
+name: WRT-Start
+
+#CI计划
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      SOURCE_URL:
+        type: choice
+        description: '源码'
+        required: true
+        default: 'https://github.com/VIKINGYFY/immortalwrt'
+        options:
+          - https://github.com/VIKINGYFY/immortalwrt
+          - https://xxxx
+      BRANCH:
+        description: '分支(请输入正确的分支)'
+        required: true
+        default: 'main'
+        type: string
+      CONFIG_DEVICE:
+        type: choice
+        description: '设备'
+        required: true
+        default: 'jdcloud_re-cs-07'
+        options:
+          - jdcloud_re-cs-07
+          - test1
+          - test2
+      LAN_IP:
+        description: '路由器登录地址'
+        required: true
+        default: '192.168.8.1'
+      NO_DOCKERMAN:
+        description: 'Not build luci-app-dockerman'
+        required: true
+        default: true
+        type: boolean
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+#  schedule:
+#    - cron: 0 16 * * *
+
+#CI权限
+permissions: write-all
+
+#CI任务
+jobs:
+  config:
+    name: ${{github.event.inputs.CONFIG_DEVICE}}
+    #调用公用编译核心WRT-CORE.yml
+    uses: ./.github/workflows/WRT-CORE.yml
+    with:
+      #项目名称
+      OPENWRT_NAME: WRT
+      #feed文件
+      FEEDS_CONF: feeds.conf.default
+      #Releases标签名称
+      UPLOAD_TAG_NAME: ${{github.event.inputs.CONFIG_DEVICE}}
+      #使用源码
+      REPO_URL: ${{github.event.inputs.SOURCE_URL}}
+      #源码分支
+      REPO_BRANCH: ${{github.event.inputs.BRANCH}}
+      #编译配置
+      CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
+      #路由器地址
+      SET_IP: ${{github.event.inputs.LAN_IP}}
+      #自定义脚本1
+      DIY_P1_SH: Scripts/diy-part1.sh
+      #自定义脚本2
+      DIY_P2_SH: Scripts/diy-part2.sh
