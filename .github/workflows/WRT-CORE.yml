@@ -127,7 +127,7 @@ jobs:
         ./scripts/feeds install -a
 
     - name: Custom Packages(自定义包)
-        run: |
+      run: |
           cd openwrt/package/
           chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Packages.sh
@@ -228,5 +228,4 @@ jobs:
         files: ${{ env.FIRMWARE }}/*
         name: ${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.BUILD_DOCKERMAN }}
         tag_name: ${{ steps.tag.outputs.release_tag }}
-        body_path: release.txt
-        
+        body_path: release.txt 
