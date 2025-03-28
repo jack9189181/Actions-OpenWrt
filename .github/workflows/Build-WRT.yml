@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 ###############手动修改##############
-name: JDCloud-Taiyi-VIKINGYFY
+name: Build-WRT
 
 on:
   repository_dispatch:
@@ -27,13 +27,13 @@ on:
         required: true
         default: 'main'
         type: string
-      CONFIG_PATH:
+      CONFIG_DEVICE:
         type: choice
-        description: '配置文件路径'
+        description: '设备'
         required: true
-        default: 'Config/JDCloud-Taiyi.config'
+        default: 'jdcloud_re-cs-07'
         options:
-          - Config/JDCloud-Taiyi.config
+          - jdcloud_re-cs-07
           - test1
           - test2
       LAN_IP:
@@ -59,7 +59,7 @@ env:
   FEEDS_CONF: feeds.conf.default
   REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: ${{github.event.inputs.BRANCH}}
-  CONFIG_FILE: ${{github.event.inputs.CONFIG_PATH}}
+  CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
   DIY_P1_SH: Scripts/diy-part1.sh
   DIY_P2_SH: Scripts/diy-part2.sh
   SSH_ACTIONS: false
