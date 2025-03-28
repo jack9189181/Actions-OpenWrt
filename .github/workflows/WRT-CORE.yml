@@ -98,7 +98,6 @@ jobs:
         # this might remove tools that are actually needed,
         # when set to "true" but frees about 6 GB
         tool-cache: true
-        
         # all of these default to true, but feel free to set to
         # "false" if necessary for your workflow
         android: false
@@ -162,7 +161,6 @@ jobs:
         cd openwrt
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
-        
         sed -nE 's/.*(192.168\.[0-9]+\.[0-9]+).*/\1/p' package/base-files/files/bin/config_generate | head -n 1 > IP_ADDR
         [ -s IP_ADDR ] && echo "IP_ADDR=$(cat IP_ADDR)" >> $GITHUB_ENV
         if grep -q 'CONFIG_PACKAGE_luci-app-dockerman=y' .config; then
