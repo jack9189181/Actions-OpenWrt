@@ -133,6 +133,7 @@ jobs:
         chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
         cd openwrt/package/
         $GITHUB_WORKSPACE/Scripts/Packages.sh
+        cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 取消编译dockerman
