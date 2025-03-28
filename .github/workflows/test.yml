@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 ###############手动修改##############
-name: test1
+name: atest
 
 on:
   repository_dispatch:
