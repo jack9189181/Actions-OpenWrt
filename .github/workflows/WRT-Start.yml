@@ -13,7 +13,7 @@ on:
         default: 'https://github.com/VIKINGYFY/immortalwrt'
         options:
           - https://github.com/VIKINGYFY/immortalwrt
-          - https://xxxx
+          - https://github.com/LiBwrt/openwrt-6.x
       BRANCH:
         description: '分支(请输入正确的分支)'
         required: true
