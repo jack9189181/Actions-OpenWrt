@@ -26,7 +26,7 @@ on:
         default: 'jdcloud_re-cs-07'
         options:
           - jdcloud_re-cs-07
-          - test1
+          - jdcloud_re-ss-01
           - test2
       LAN_IP:
         description: '路由器登录地址'
