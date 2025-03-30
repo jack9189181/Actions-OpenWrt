@@ -71,7 +71,7 @@ jobs:
     - name: 检查项目分支
       uses: actions/checkout@main
 
-    - name: 初始化编译环境
+    - name: 初始化编译环境(Initialization Environment)
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -91,6 +91,9 @@ jobs:
         sudo -E timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+        # 获取固件所属的平台
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
 
     - name: 清理磁盘空间(Ubuntu)
       uses: jlumbroso/free-disk-space@main
@@ -106,7 +109,7 @@ jobs:
         large-packages: false
         swap-storage: false
 
-    - name: 下载固件源码
+    - name: 下载固件源码(Clone Code)
       working-directory: /workdir
       run: |
         df -hT $PWD
