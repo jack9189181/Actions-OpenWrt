@@ -1,5 +1,5 @@
 #CI项目
-name: Build-WRT
+name: WRT-Start
 
 #CI计划
 on:
