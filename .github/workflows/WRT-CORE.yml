@@ -94,6 +94,7 @@ jobs:
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
+        echo "$WRT_TARGET"
 
     - name: 清理磁盘空间(Ubuntu)
       uses: jlumbroso/free-disk-space@main
