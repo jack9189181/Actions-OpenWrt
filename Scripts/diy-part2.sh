@@ -77,6 +77,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	#设置NSS版本
 	echo "CONFIG_NSS_FIRMWARE_VERSION_11_4=n" >> ./.config
 	echo "CONFIG_NSS_FIRMWARE_VERSION_12_2=y" >> ./.config
+	echo "NSS版本设置成功"
 fi
 
 #编译器优化
