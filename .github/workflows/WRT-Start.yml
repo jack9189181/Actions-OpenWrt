@@ -27,7 +27,7 @@ on:
         options:
           - jdcloud_re-cs-07
           - jdcloud_re-ss-01
-          - test2
+          - aliyun_ap8220
       LAN_IP:
         description: '路由器登录地址'
         required: true
