@@ -136,4 +136,4 @@ sed -ri \'/check_signature/s@^[^#]@#&@\' /etc/opkg.conf\n" $emortal_def_dir/file
     fi
 }
 
-INSTALL_OPKG_DISTFEEDS()
+INSTALL_OPKG_DISTFEEDS
