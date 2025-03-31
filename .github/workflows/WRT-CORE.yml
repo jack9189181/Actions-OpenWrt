@@ -83,8 +83,8 @@ jobs:
         # sudo -E apt -yqq clean
         # sudo -E systemctl daemon-reload
         # sudo -E timedatectl set-timezone "Asia/Shanghai"
-        # sudo mkdir -p /workdir
-        # sudo chown $USER:$GROUPS /workdir
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
