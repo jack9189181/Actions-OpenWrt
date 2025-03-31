@@ -45,6 +45,8 @@ env:
   REPO_BRANCH: ${{github.event.inputs.BRANCH}}
   CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
   SET_IP: ${{github.event.inputs.LAN_IP}}
+  NO_WIFI: ${{github.event.inputs.NO_WIRELESS}}
+  NO_DOCKER: ${{github.event.inputs.NO_DOCKERMAN}}
   DIY_P1_SH: Scripts/diy-part1.sh
   DIY_P2_SH: Scripts/diy-part2.sh
   SSH_ACTIONS: false
