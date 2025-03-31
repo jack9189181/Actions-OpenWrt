@@ -25,10 +25,10 @@ on:
         type: string
       NO_WIFI: 
         required: true
-        type: boolean
+        type: string
       NO_DOCKER: 
         required: true
-        type: boolean
+        type: string
       DIY_P1_SH:
         required: true
         type: string
