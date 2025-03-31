@@ -17,14 +17,8 @@ on:
       BRANCH:
         description: '分支(请输入正确的分支)'
         required: true
-        # default: 'main'
+        default: 'main'
         type: string
-
-        if [[ ${{github.event.inputs.SOURCE_URL}} == 'https://github.com/VIKINGYFY/immortalwrt' ]]; then
-                default: 'test'
-        else
-                default: 'main'
-        fi
       CONFIG_DEVICE:
         type: choice
         description: '设备'
