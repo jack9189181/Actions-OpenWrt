@@ -81,7 +81,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	#无WIFI配置调整Q6大小
 	if [[ $NO_WIFI == "true" ]]; then
 		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
-		echo "无WIFI配置调整Q成功!"
+		echo "无WIFI配置调整Q6成功!"
 	fi
 fi
 
