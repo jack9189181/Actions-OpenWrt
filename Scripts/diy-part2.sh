@@ -20,7 +20,7 @@
 # mv /tmp/clash package/kenzo/luci-app-openclash/root/etc/openclash/core/clash >/dev/null 2>&1
 # rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
-# Modify default IP
+# 修改路由器登录地址
 if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
 	#修改immortalwrt.lan关联IP
 	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" $(find feeds/luci/modules/luci-mod-system -type f -name "flash.js")
@@ -77,7 +77,12 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	#设置NSS版本
 	echo "CONFIG_NSS_FIRMWARE_VERSION_11_4=n" >> ./.config
 	echo "CONFIG_NSS_FIRMWARE_VERSION_12_2=y" >> ./.config
-	echo "NSS版本设置成功"
+	echo "NSS版本设置成功!"
+	#无WIFI配置调整Q6大小
+	if [[ $NO_WIFI == "true" ]]; then
+		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
+		echo "无WIFI配置调整Q成功!"
+	fi
 fi
 
 #编译器优化

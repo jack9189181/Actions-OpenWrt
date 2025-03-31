@@ -32,6 +32,11 @@ on:
         description: '路由器登录地址'
         required: true
         default: '192.168.8.1'
+      NO_WIRELESS:
+        description: 'Not build WIFI'
+        required: true
+        default: flase
+        type: boolean
       NO_DOCKERMAN:
         description: 'Not build luci-app-dockerman'
         required: true
@@ -68,6 +73,10 @@ jobs:
       CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
       #路由器地址
       SET_IP: ${{github.event.inputs.LAN_IP}}
+      #NO_WIFI
+      NO_WIFI: ${{github.event.inputs.NO_WIRELESS}}
+      #NO_DOCKER
+      NO_DOCKER: ${{github.event.inputs.NO_DOCKERMAN}}
       #自定义脚本1
       DIY_P1_SH: Scripts/diy-part1.sh
       #自定义脚本2
