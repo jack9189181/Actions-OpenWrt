@@ -146,7 +146,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 取消编译dockerman
-      if: $NO_DOCKER == 'true'
+      if: env.NO_DOCKER == 'true'
       run: |
         cd openwrt
         sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
