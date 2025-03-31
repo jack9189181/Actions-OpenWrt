@@ -32,7 +32,7 @@ else
 fi
 
 # 修改opkg软件源
-emortal_def_dir="$GITHUB_WORKSPACE/openwrt/emortal/default-settings"
+emortal_def_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/default-settings"
 distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
 
 if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
