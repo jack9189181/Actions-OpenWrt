@@ -14,6 +14,7 @@ on:
         options:
           - https://github.com/VIKINGYFY/immortalwrt
           - https://github.com/LiBwrt/openwrt-6.x
+          - https://github.com/padavanonly/immortalwrt-mt798x-24.10
       BRANCH:
         description: '分支(请输入正确的分支)'
         required: true
@@ -28,6 +29,7 @@ on:
           - jdcloud_re-cs-07
           - jdcloud_re-ss-01
           - aliyun_ap8220
+          - jdcloud_re-cp-03
       LAN_IP:
         description: '路由器登录地址'
         required: true
