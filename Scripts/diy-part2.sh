@@ -34,7 +34,6 @@ fi
 # 修改opkg软件源
 emortal_def_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/default-settings"
 distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
-
 if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
     cat <<'EOF' >"$distfeeds_conf"
 	src/gz openwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base/
@@ -54,46 +53,20 @@ else
 	echo "软件源未修改成功"
 fi
 
-PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
-cd $PKG_PATH
-
 #修改argon主题字体和颜色
-if [ -d *"luci-theme-argon"* ]; then
-	cd ./luci-theme-argon/
-
-	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./luci-theme-argon -type f -iname "*.css")
-	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
-
+if [ -d *"$GITHUB_WORKSPACE/openwrt/package/luci-theme-argon"* ]; then
+	cd $GITHUB_WORKSPACE/openwrt/package/luci-theme-argon
+	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find $GITHUB_WORKSPACE/openwrt/package/luci-theme-argon -type f -iname "*.css")
+	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" $GITHUB_WORKSPACE/openwrt/package/luci-app-argon-config/root/etc/config/argon
 	cd $PKG_PATH && echo "theme-argon has been fixed!"
 else
 	echo "theme is not fixed!"
 fi
 
-#修改qca-nss-drv启动顺序
-NSS_DRV="../feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
-if [ -f "$NSS_DRV" ]; then
-	sed -i 's/START=.*/START=85/g' $NSS_DRV
-
-	cd $PKG_PATH && echo "qca-nss-drv has been fixed!"
-else
-	echo "err"
-fi
-
-#修改qca-nss-pbuf启动顺序
-NSS_PBUF="./kernel/mac80211/files/qca-nss-pbuf.init"
-if [ -f "$NSS_PBUF" ]; then
-	sed -i 's/START=.*/START=86/g' $NSS_PBUF
-
-	cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
-else
-	echo "err"
-fi
-
-PKG_PATH="$GITHUB_WORKSPACE/openwrt/"
-cd $PKG_PATH
 #高通平台调整
-DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
 if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
+	PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
+	DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
 	#取消nss相关feed
 	echo "CONFIG_FEED_nss_packages=n" >> ./.config
 	echo "CONFIG_FEED_sqm_scripts_nss=n" >> ./.config
@@ -105,6 +78,24 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	if [[ $NO_WIFI == "true" ]]; then
 		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
 		echo "无WIFI配置调整Q6成功!"
+	fi
+	cd $PKG_PATH
+	#修改qca-nss-drv启动顺序
+	NSS_DRV="../feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	if [ -f "$NSS_DRV" ]; then
+		sed -i 's/START=.*/START=85/g' $NSS_DRV
+
+		cd $PKG_PATH && echo "qca-nss-drv has been fixed!"
+	else
+		echo "err"
+	fi
+	#修改qca-nss-pbuf启动顺序
+	NSS_PBUF="./kernel/mac80211/files/qca-nss-pbuf.init"
+	if [ -f "$NSS_PBUF" ]; then
+		sed -i 's/START=.*/START=86/g' $NSS_PBUF
+		cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
+	else
+		echo "err"
 	fi
 fi
 
