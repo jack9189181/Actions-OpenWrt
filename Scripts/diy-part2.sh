@@ -36,11 +36,11 @@ emortal_def_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/default-settings"
 distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
 if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
     cat <<'EOF' >"$distfeeds_conf"
-	src/gz openwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base/
-	src/gz openwrt_luci https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/luci/
-	src/gz openwrt_packages https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/packages/
-	src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/routing/
-	src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
+src/gz openwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base/
+src/gz openwrt_luci https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/luci/
+src/gz openwrt_packages https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/packages/
+src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/routing/
+src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
 EOF
     sed -i "/define Package\/default-settings\/install/a\\
 \\t\$(INSTALL_DIR) \$(1)/etc\\n\
@@ -73,7 +73,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	NSS_DRV="$GITHUB_WORKSPACE/openwrt/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
 		sed -i 's/START=.*/START=85/g' $NSS_DRV
-		cd $PKG_PATH && echo "qca-nss-drv has been fixed!"
+		echo "qca-nss-drv has been fixed!"
 	else
 		echo "err"
 	fi
@@ -81,7 +81,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	NSS_PBUF="$GITHUB_WORKSPACE/openwrt/package/kernel/mac80211/files/qca-nss-pbuf.init"
 	if [ -f "$NSS_PBUF" ]; then
 		sed -i 's/START=.*/START=86/g' $NSS_PBUF
-		cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
+		echo "qca-nss-pbuf has been fixed!"
 	else
 		echo "err"
 	fi
