@@ -142,7 +142,7 @@ jobs:
         # sudo chown $USER:$GROUPS /workdir
         sudo mkdir -p /mnt/workdir
         sudo chown $USER:$USER /mnt/workdir
-        sudo ln -s /mnt/workdir $GITHUB_WORKSPACE/openwrt
+        # sudo ln -s /mnt/workdir $GITHUB_WORKSPACE/openwrt
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
@@ -168,6 +168,7 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         # ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 加载feeds.conf.default & DIY_P1_SH
       run: |
