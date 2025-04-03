@@ -96,27 +96,23 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	fi
 fi
 
-# cd ./package/
-# #修改argon主题字体和颜色
-# if [ -d *"luci-theme-argon"* ]; then
-# 	cd ./luci-theme-argon/
-# 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./luci-theme-argon -type f -iname "*.css")
-# 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
-# 	echo "theme-argon has been fixed!"
-# else
-# 	echo "theme is not fixed!"
-# fi
+#移除Shadowsocks组件
+PW_FILE=$(find ./package/ -maxdepth 3 -type f -wholename "*/luci-app-passwall/Makefile")
+if [ -f "$PW_FILE" ]; then
+	sed -i '/config PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Libev/,/x86_64/d' $PW_FILE
+	sed -i '/config PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR/,/default n/d' $PW_FILE
+	sed -i '/Shadowsocks_NONE/d; /Shadowsocks_Libev/d; /ShadowsocksR/d' $PW_FILE
+	echo "passwall has been fixed!"
+else
+	echo "没找到passwall目录"
+fi
 
-
-
-
-
-# #修改argon主题字体和颜色
-# if [ -d "$GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon" ]; then
-# 	cd $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon/
-# 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon -type f -iname "*.css")
-# 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-app-argon-config/root/etc/config/argon
-# 	echo "theme-argon has been fixed!"
-# else
-# 	echo "theme is not fixed!"
-# fi
+SP_FILE=$(find ./package/ -maxdepth 3 -type f -wholename "*/luci-app-ssr-plus/Makefile")
+if [ -f "$SP_FILE" ]; then
+	sed -i '/default PACKAGE_$(PKG_NAME)_INCLUDE_Shadowsocks_Libev/,/libev/d' $SP_FILE
+	sed -i '/config PACKAGE_$(PKG_NAME)_INCLUDE_ShadowsocksR/,/x86_64/d' $SP_FILE
+	sed -i '/Shadowsocks_NONE/d; /Shadowsocks_Libev/d; /ShadowsocksR/d' $SP_FILE
+	echo "ssr-plus has been fixed!"
+else
+	echo "没找到ssr目录"
+fi
