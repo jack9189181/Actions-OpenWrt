@@ -87,7 +87,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	fi
 fi
 
-cd package/
+cd ./package/
 #修改argon主题字体和颜色
 if [ -d *"luci-theme-argon"* ]; then
 	cd ./luci-theme-argon/
