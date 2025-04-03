@@ -31,6 +31,15 @@ else
 	echo "Invalid IP address, use default."
 fi
 
+#修改argon主题字体和颜色
+if [ -d "./package/luci-theme-argon" ]; then
+	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./package/luci-theme-argon/luci-theme-argon -type f -iname "*.css")
+	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-theme-argon/luci-app-argon-config/root/etc/config/argon
+	echo "theme-argon has been fixed!"
+else
+	echo "theme is not fixed!"
+fi
+
 # 修改opkg软件源
 emortal_def_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/default-settings"
 distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
@@ -99,17 +108,7 @@ fi
 # fi
 
 
-#修改argon主题字体和颜色
-if [ -d "./package/luci-theme-argon" ]; then
-	echo "存在"
-	cd ./package/luci-theme-argon/
-	echo "进入theme目录了"
-	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./luci-theme-argon -type f -iname "*.css")
-	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
-	echo "theme-argon has been fixed!"
-else
-	echo "theme is not fixed!"
-fi
+
 
 
 # #修改argon主题字体和颜色
