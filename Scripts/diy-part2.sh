@@ -65,8 +65,7 @@ fi
 
 #高通平台调整
 if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
-	PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
-	DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
+	# PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 	#取消nss相关feed
 	echo "CONFIG_FEED_nss_packages=n" >> ./.config
 	echo "CONFIG_FEED_sqm_scripts_nss=n" >> ./.config
@@ -76,31 +75,24 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	echo "NSS版本设置成功!"
 	#无WIFI配置调整Q6大小
 	if [[ $NO_WIFI == "true" ]]; then
+		DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
 		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
 		echo "无WIFI配置调整Q6成功!"
 	fi
-	cd $PKG_PATH
 	#修改qca-nss-drv启动顺序
-	NSS_DRV="../feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	NSS_DRV="$GITHUB_WORKSPACE/openwrt/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
 		sed -i 's/START=.*/START=85/g' $NSS_DRV
-
 		cd $PKG_PATH && echo "qca-nss-drv has been fixed!"
 	else
 		echo "err"
 	fi
 	#修改qca-nss-pbuf启动顺序
-	NSS_PBUF="./kernel/mac80211/files/qca-nss-pbuf.init"
+	NSS_PBUF="$GITHUB_WORKSPACE/openwrt/package/kernel/mac80211/files/qca-nss-pbuf.init"
 	if [ -f "$NSS_PBUF" ]; then
 		sed -i 's/START=.*/START=86/g' $NSS_PBUF
 		cd $PKG_PATH && echo "qca-nss-pbuf has been fixed!"
 	else
 		echo "err"
 	fi
-fi
-
-#编译器优化
-if [[ $WRT_TARGET != *"X86"* ]]; then
-	echo "CONFIG_TARGET_OPTIONS=y" >> ./.config
-	echo "CONFIG_TARGET_OPTIMIZATION=\"-O2 -pipe -march=armv8-a+crypto+crc -mcpu=cortex-a53+crypto+crc -mtune=cortex-a53\"" >> ./.config
 fi
