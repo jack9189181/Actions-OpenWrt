@@ -100,7 +100,7 @@ fi
 
 
 #修改argon主题字体和颜色
-if [ -d *"./package/luci-theme-argon"* ]; then
+if [ -d "./package/luci-theme-argon" ]; then
 	echo "存在"
 	cd ./package/luci-theme-argon/
 	echo "进入theme目录了"
