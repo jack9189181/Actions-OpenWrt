@@ -87,16 +87,30 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	fi
 fi
 
-cd ./package/
+# cd ./package/
+# #修改argon主题字体和颜色
+# if [ -d *"luci-theme-argon"* ]; then
+# 	cd ./luci-theme-argon/
+# 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./luci-theme-argon -type f -iname "*.css")
+# 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
+# 	echo "theme-argon has been fixed!"
+# else
+# 	echo "theme is not fixed!"
+# fi
+
+
 #修改argon主题字体和颜色
-if [ -d *"luci-theme-argon"* ]; then
-	cd ./luci-theme-argon/
+if [ -d *"./package/luci-theme-argon"* ]; then
+	echo "存在"
+	cd ./package/luci-theme-argon/
+	echo "进入theme目录了"
 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./luci-theme-argon -type f -iname "*.css")
 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./luci-app-argon-config/root/etc/config/argon
 	echo "theme-argon has been fixed!"
 else
 	echo "theme is not fixed!"
 fi
+
 
 # #修改argon主题字体和颜色
 # if [ -d "$GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon" ]; then
