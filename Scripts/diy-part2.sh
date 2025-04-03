@@ -54,10 +54,10 @@ else
 fi
 
 #修改argon主题字体和颜色
-if [ -d *"$GITHUB_WORKSPACE/openwrt/package/luci-theme-argon"* ]; then
-	cd $GITHUB_WORKSPACE/openwrt/package/luci-theme-argon/
-	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find $GITHUB_WORKSPACE/openwrt/package/luci-theme-argon -type f -iname "*.css")
-	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" $GITHUB_WORKSPACE/openwrt/package/luci-app-argon-config/root/etc/config/argon
+if [ -d *"$GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon"* ]; then
+	cd $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon/
+	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-theme-argon -type f -iname "*.css")
+	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" $GITHUB_WORKSPACE/openwrt/package/feeds/luci/luci-app-argon-config/root/etc/config/argon
 	echo "theme-argon has been fixed!"
 else
 	echo "theme is not fixed!"
