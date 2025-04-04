@@ -76,24 +76,24 @@ jobs:
         echo "--------------------------硬盘信息--------------------------"
         echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
-    - name: 合并磁盘空间
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 2048
-        # remove-dotnet: 'true'
-        # remove-android: 'true'
-        # remove-haskell: 'true'
-        # remove-codeql: 'true'
-        # remove-docker-images: 'true'
+    # - name: 合并磁盘空间
+    #   uses: easimon/maximize-build-space@master
+    #   with:
+    #     swap-size-mb: 1024
+    #     temp-reserve-mb: 100
+    #     root-reserve-mb: 2048
+    #     # remove-dotnet: 'true'
+    #     # remove-android: 'true'
+    #     # remove-haskell: 'true'
+    #     # remove-codeql: 'true'
+    #     # remove-docker-images: 'true'
 
-    - name: 检查磁盘空间
-      run: |
-        echo "Free up disk space complete"
-        echo "=============================================================================="
-        df -hT
-        echo "=============================================================================="
+    # - name: 检查磁盘空间
+    #   run: |
+    #     echo "Free up disk space complete"
+    #     echo "=============================================================================="
+    #     df -hT
+    #     echo "=============================================================================="
 
     - name: 检查项目分支
       uses: actions/checkout@main
@@ -111,10 +111,10 @@ jobs:
         sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
         sudo -E systemctl daemon-reload
         sudo -E timedatectl set-timezone "Asia/Shanghai"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-        # sudo mkdir -p /mnt/workdir
-        # sudo chown $USER:$USER /mnt/workdir
+        # sudo mkdir -p /workdir
+        # sudo chown $USER:$GROUPS /workdir
+        sudo mkdir -p /mnt/workdir
+        sudo chown $USER:$USER /mnt/workdir
         
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
@@ -136,12 +136,12 @@ jobs:
         swap-storage: false
 
     - name: 下载固件源码(Clone Code)
-      working-directory: /workdir
+      working-directory: /mnt/workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         # ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 加载feeds.conf.default & DIY_P1_SH
       run: |
