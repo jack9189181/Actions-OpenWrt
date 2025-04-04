@@ -54,7 +54,7 @@ jobs:
     - name: Check Space Usage
       if: (!cancelled())
       run: df -hT
-      
+
     - name: 初始化编译环境(Initialization Environment)
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -68,12 +68,16 @@ jobs:
         sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
         sudo -E systemctl daemon-reload
         sudo -E timedatectl set-timezone "Asia/Shanghai"
-        # sudo mkdir -p /workdir
-        # sudo chown $USER:$GROUPS /workdir
-        sudo mkdir -p /mnt/workdir
-        sudo chown $USER:$USER /mnt/workdir
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+        # sudo mkdir -p /mnt/workdir
+        # sudo chown $USER:$USER /mnt/workdir
         
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
         echo "编译的固件所属平台为：$WRT_TARGET"
+
+    - name: Check Space Usage
+      if: (!cancelled())
+      run: df -hT
