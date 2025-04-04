@@ -1,8 +1,8 @@
-name: test flows
+name: testflows
 
 on:
   workflow_dispatch:
-  schedule:
+  # schedule:
     # - cron: 0 18 * * *
 
 env:
