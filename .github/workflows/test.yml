@@ -36,7 +36,7 @@ jobs:
       uses: easimon/maximize-build-space@master
       with:
         swap-size-mb: 1024
-        temp-reserve-mb: 100
+        # temp-reserve-mb: 100
         root-reserve-mb: 2048
 
     - name: Check Space Usage
