@@ -69,7 +69,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 		echo "无WIFI配置调整Q6成功!"
 	fi
 	#修改qca-nss-drv启动顺序
-	NSS_DRV="$GITHUB_WORKSPACE/openwrt/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
 		sed -i 's/START=.*/START=85/g' $NSS_DRV
 		echo "qca-nss-drv has been fixed!"
