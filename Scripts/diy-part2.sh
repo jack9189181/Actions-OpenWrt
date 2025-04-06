@@ -54,7 +54,6 @@ fi
 
 #高通平台调整
 if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
-	# PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 	#取消nss相关feed
 	echo "CONFIG_FEED_nss_packages=n" >> ./.config
 	echo "CONFIG_FEED_sqm_scripts_nss=n" >> ./.config
@@ -69,7 +68,8 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 		echo "无WIFI配置调整Q6成功!"
 	fi
 	#修改qca-nss-drv启动顺序
-	NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	# NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	NSS_DRV="$GITHUB_WORKSPACE/openwrt/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
 		sed -i 's/START=.*/START=85/g' $NSS_DRV
 		echo "qca-nss-drv has been fixed!"
