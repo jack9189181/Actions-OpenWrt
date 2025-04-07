@@ -76,28 +76,6 @@ jobs:
         echo "--------------------------硬盘信息--------------------------"
         echo "硬盘数量：$(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
-    # - name: 合并磁盘空间
-    #   uses: easimon/maximize-build-space@master
-    #   with:
-    #     swap-size-mb: 1024
-    #     temp-reserve-mb: 100
-    #     root-reserve-mb: 2048
-    #     # remove-dotnet: 'true'
-    #     # remove-android: 'true'
-    #     # remove-haskell: 'true'
-    #     # remove-codeql: 'true'
-    #     # remove-docker-images: 'true'
-
-    # - name: 检查磁盘空间
-    #   run: |
-    #     echo "Free up disk space complete"
-    #     echo "=============================================================================="
-    #     df -hT
-    #     echo "=============================================================================="
-
-    - name: 检查项目分支
-      uses: actions/checkout@main
-
     - name: 初始化编译环境(Initialization Environment)
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -111,91 +89,107 @@ jobs:
         sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
         sudo -E systemctl daemon-reload
         sudo -E timedatectl set-timezone "Asia/Shanghai"
-        # sudo mkdir -p /workdir
-        # sudo chown $USER:$GROUPS /workdir
-        sudo mkdir -p /mnt/workdir
-        sudo chown $USER:$USER /mnt/workdir
-        
         # 获取固件所属的平台
         export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
         echo "编译的固件所属平台为：$WRT_TARGET"
-
-    - name: 清理磁盘空间(Ubuntu)
-      uses: jlumbroso/free-disk-space@main
+    
+    - name: 合并磁盘空间(Combine Disks)
+      uses: easimon/maximize-build-space@master
       with:
-        # this might remove tools that are actually needed,
-        # when set to "true" but frees about 6 GB
-        tool-cache: true
-        # all of these default to true, but feel free to set to
-        # "false" if necessary for your workflow
-        android: false
-        dotnet: false
-        haskell: false
-        large-packages: false
-        swap-storage: false
+        swap-size-mb: 1024
+        temp-reserve-mb: 100
+        root-reserve-mb: 2048
+        # remove-dotnet: 'true'
+        # remove-android: 'true'
+        # remove-haskell: 'true'
+        # remove-codeql: 'true'
+        # remove-docker-images: 'true'
 
-    - name: 下载固件源码(Clone Code)
-      working-directory: /mnt/workdir
+    - name: 检查磁盘空间(Check Space Usage)
       run: |
-        df -hT $PWD
+        echo "Free up disk space complete"
+        echo "=============================================================================="
+        df -hT
+        echo "=============================================================================="
+    
+    # - name: 清理磁盘空间(Ubuntu)
+    #   uses: jlumbroso/free-disk-space@main
+    #   with:
+    #     # this might remove tools that are actually needed,
+    #     # when set to "true" but frees about 6 GB
+    #     tool-cache: true
+    #     # all of these default to true, but feel free to set to
+    #     # "false" if necessary for your workflow
+    #     android: false
+    #     dotnet: false
+    #     haskell: false
+    #     large-packages: false
+    #     swap-storage: false
+
+    - name: 检查项目分支(checkout)
+      uses: actions/checkout@main
+
+    - name: 下载固件源码(Clone Source Code)
+      run: |
+        df -hT $GITHUB_WORKSPACE
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        # ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        ln -sf /mnt/workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
-    - name: 加载feeds.conf.default & DIY_P1_SH
-      run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
         cd openwrt
+        echo "OPENWRT_PATH=$PWD" >> $GITHUB_ENV
+
+    - name: 加载feeds.conf.default & DIY_P1_SH(Load Feeds & DIY1)
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF $OPENWRT_PATH/feeds.conf.default
+        chmod +x $DIY_P1_SH
+        cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
-    - name: 更新 & 安装 feeds
+    - name: 安装Feeds(Install Feeds)
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: Custom Packages(自定义包)
+    - name: 自定义包(Custom Packages)
       run: |
-          cd openwrt/package/
+          cd $OPENWRT_PATH/package/
           chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Packages.sh
 
-    - name: 加载config & DIY_P2_SH
+    - name: 加载config & DIY_P2_SH(Load Custom Configuration and DIY2)
       run: |
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
-        cd openwrt
+        cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
-    - name: 取消编译dockerman
+    - name: 是否编译DOCKER(DockerMan)
       if: env.NO_DOCKER == 'true'
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
         echo "固件不含Docker!"
 
-    - name: SSH链接管理
+    - name: SSH链接管理(SSH Manage)
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
-    - name: 下载安装包
+    - name: 下载软件包(Download DL Package)
       id: package
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         make defconfig
         make download -j$(nproc)
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: 编译固件
+    - name: 编译固件(Compile Firmware)
       id: compile
       run: |
-        cd openwrt
+        cd $OPENWRT_PATH
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 || make -j1 V=s
         sed -nE 's/.*(192.168\.[0-9]+\.[0-9]+).*/\1/p' package/base-files/files/bin/config_generate | head -n 1 > IP_ADDR
@@ -208,16 +202,16 @@ jobs:
         echo "FILE_DATE=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: 查看磁盘使用情况
+    - name: 查看磁盘使用情况(Check Space Usage)
       if: (!cancelled())
       run: df -hT
 
-    - name: 整理文件并重命名
+    - name: 重命名文件(Rename Files)
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: | 
-        mapfile -t devices < <(grep '^CONFIG_TARGET_DEVICE.*=y' openwrt/.config | sed -r 's/.*DEVICE_(.*)=y/\1/')
-        cd openwrt/bin/targets/*/*
+        mapfile -t devices < <(grep '^CONFIG_TARGET_DEVICE.*=y' $OPENWRT_PATH/.config | sed -r 's/.*DEVICE_(.*)=y/\1/')
+        cd $OPENWRT_PATH/bin/targets/*/*
         rm -rf packages
         sudo -E apt-get -qq install rename
                 for val in "${devices[@]}"; do
@@ -227,14 +221,14 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: 打包上传固件到Actions Artifacts
+    - name: 打包上传固件到Artifacts(Upload Firmware To Artifact)
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: ${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.BUILD_DOCKERMAN }}
         path: ${{ env.FIRMWARE }}
 
-    - name: 生成固件Release标签
+    - name: 生成Release标签(Generate the Release tag)
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
@@ -250,7 +244,7 @@ jobs:
         echo "release_tag=${{ env.FILE_DATE }}-${{ env.OPENWRT_NAME }}-${{ env.UPLOAD_TAG_NAME }}${{ env.BUILD_DOCKERMAN }}" >> $GITHUB_OUTPUT
         echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: 发布固件至Release
+    - name: 发布固件至Release(Upload Firmware To Release)
       uses: softprops/action-gh-release@v2.1.0
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
