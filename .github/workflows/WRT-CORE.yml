@@ -43,7 +43,7 @@ env:
   UPLOAD_TAG_NAME: ${{github.event.inputs.CONFIG_DEVICE}}
   REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: ${{github.event.inputs.BRANCH}}
-  CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
+  CONFIG_FILE: $GITHUB_WORKSPACE/Config/${{github.event.inputs.CONFIG_DEVICE}}.config
   SET_IP: ${{github.event.inputs.LAN_IP}}
   NO_WIFI: ${{github.event.inputs.NO_WIRELESS}}
   NO_DOCKER: ${{github.event.inputs.NO_DOCKERMAN}}

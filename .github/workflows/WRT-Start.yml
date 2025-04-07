@@ -72,7 +72,7 @@ jobs:
       #源码分支
       REPO_BRANCH: ${{github.event.inputs.BRANCH}}
       #编译配置
-      CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
+      CONFIG_FILE: $GITHUB_WORKSPACE/Config/${{github.event.inputs.CONFIG_DEVICE}}.config
       #路由器地址
       SET_IP: ${{github.event.inputs.LAN_IP}}
       #NO_WIFI
