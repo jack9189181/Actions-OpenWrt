@@ -89,10 +89,6 @@ jobs:
         sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
         sudo -E systemctl daemon-reload
         sudo -E timedatectl set-timezone "Asia/Shanghai"
-        # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $GITHUB_WORKSPACE/$CONFIG_FILE | tr '[:lower:]' '[:upper:]')
-        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
-        echo "编译的固件所属平台为：$WRT_TARGET"
     
     - name: 合并磁盘空间(Combine Disks)
       uses: easimon/maximize-build-space@master
@@ -113,6 +109,12 @@ jobs:
         df -hT
         echo "=============================================================================="
     
+    - name: 生成变量(Generate Variables)
+      run: |
+        # 获取固件所属的平台
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
+        echo "编译的固件所属平台为：$WRT_TARGET"
     # - name: 清理磁盘空间(Ubuntu)
     #   uses: jlumbroso/free-disk-space@main
     #   with:
@@ -158,7 +160,7 @@ jobs:
 
     - name: 加载config & DIY_P2_SH(Load Custom Configuration & DIY2)
       run: |
-        [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE $OPENWRT_PATH/.config
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
