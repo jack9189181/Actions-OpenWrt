@@ -31,7 +31,7 @@ else
 fi
 
 # 修改opkg软件源
-emortal_def_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/default-settings"
+emortal_def_dir="$OPENWRT_PATH/package/emortal/default-settings"
 distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
 if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
     cat <<'EOF' >"$distfeeds_conf"
@@ -69,7 +69,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	fi
 	#修改qca-nss-drv启动顺序
 	# NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
-	NSS_DRV="$GITHUB_WORKSPACE/openwrt/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
+	NSS_DRV="$OPENWRT_PATH/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
 		sed -i 's/START=.*/START=88/g' $NSS_DRV
 		echo "qca-nss-drv has been fixed!"
@@ -77,7 +77,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 		echo "err"
 	fi
 	#修改qca-nss-pbuf启动顺序
-	NSS_PBUF="$GITHUB_WORKSPACE/openwrt/package/kernel/mac80211/files/qca-nss-pbuf.init"
+	NSS_PBUF="$OPENWRT_PATH/package/kernel/mac80211/files/qca-nss-pbuf.init"
 	if [ -f "$NSS_PBUF" ]; then
 		sed -i 's/START=.*/START=89/g' $NSS_PBUF
 		echo "qca-nss-pbuf has been fixed!"
