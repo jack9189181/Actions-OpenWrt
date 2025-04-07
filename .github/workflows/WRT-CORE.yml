@@ -65,11 +65,11 @@ jobs:
     - name: 检查服务器性能(Check Server Performance)
       run: |
         echo "警告⚠"
-        echo "分配的服务器性能有限，若选择的插件过多，务必注意CPU性能！"
-        echo -e "已知CPU型号（降序）：7763，8370C，8272CL，8171M，E5-2673 \n"
+        echo "分配的服务器性能有限,若选择的插件过多,务必注意CPU性能!"
+        echo -e "已知CPU型号(降序):7763/8370C/8272CL/8171M/E5-2673 \n"
         echo "--------------------------CPU信息--------------------------"
-        echo "CPU物理数量：$(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
-        echo -e "CPU核心信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
+        echo "CPU物理数量:$(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l)"
+        echo -e "CPU核心信息:$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
         echo "--------------------------内存信息--------------------------"
         echo "已安装内存详细信息："
         echo -e "$(sudo lshw -short -C memory | grep GiB) \n"
@@ -101,13 +101,6 @@ jobs:
         # remove-haskell: 'true'
         # remove-codeql: 'true'
         # remove-docker-images: 'true'
-
-    - name: 检查磁盘空间(Check Space Usage)
-      run: |
-        echo "Free up disk space complete"
-        echo "=============================================================================="
-        df -hT
-        echo "=============================================================================="
     
     - name: 生成变量(Generate Variables)
       run: |
@@ -162,7 +155,7 @@ jobs:
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $OPENWRT_PATH/.config | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
         echo "编译的固件所属平台为：$WRT_TARGET"
         chmod +x $DIY_P2_SH
