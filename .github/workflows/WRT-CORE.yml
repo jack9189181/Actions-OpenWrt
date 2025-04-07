@@ -156,7 +156,7 @@ jobs:
           chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Packages.sh
 
-    - name: 加载config & DIY_P2_SH(Load Custom Configuration and DIY2)
+    - name: 加载config & DIY_P2_SH(Load Custom Configuration & DIY2)
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
