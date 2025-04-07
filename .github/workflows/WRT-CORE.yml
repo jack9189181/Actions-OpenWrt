@@ -43,7 +43,7 @@ env:
   UPLOAD_TAG_NAME: ${{github.event.inputs.CONFIG_DEVICE}}
   REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: ${{github.event.inputs.BRANCH}}
-  CONFIG_FILE: $GITHUB_WORKSPACE/Config/${{github.event.inputs.CONFIG_DEVICE}}.config
+  CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
   SET_IP: ${{github.event.inputs.LAN_IP}}
   NO_WIFI: ${{github.event.inputs.NO_WIRELESS}}
   NO_DOCKER: ${{github.event.inputs.NO_DOCKERMAN}}
@@ -90,7 +90,7 @@ jobs:
         sudo -E systemctl daemon-reload
         sudo -E timedatectl set-timezone "Asia/Shanghai"
         # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $GITHUB_WORKSPACE/$CONFIG_FILE | tr '[:lower:]' '[:upper:]')
         echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
         echo "编译的固件所属平台为：$WRT_TARGET"
     
@@ -158,7 +158,7 @@ jobs:
 
     - name: 加载config & DIY_P2_SH(Load Custom Configuration & DIY2)
       run: |
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+        [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
