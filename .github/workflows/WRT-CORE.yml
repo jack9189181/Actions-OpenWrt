@@ -161,6 +161,10 @@ jobs:
     - name: 加载config & DIY_P2_SH(Load Custom Configuration & DIY2)
       run: |
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
+        # 获取固件所属的平台
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
+        echo "编译的固件所属平台为：$WRT_TARGET"
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
