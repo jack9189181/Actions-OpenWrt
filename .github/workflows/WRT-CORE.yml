@@ -100,16 +100,8 @@ jobs:
         # remove-android: 'true'
         # remove-haskell: 'true'
         # remove-codeql: 'true'
-        # remove-docker-images: 'true'
-    
-    - name: 生成变量(Generate Variables)
-      run: |        
-        pwd
-        ls -al
-        # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
-        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
-        echo "编译的固件所属平台为：$WRT_TARGET"
+        # remove-docker-images: 'true'      
+
     # - name: 清理磁盘空间(Ubuntu)
     #   uses: jlumbroso/free-disk-space@main
     #   with:
@@ -130,7 +122,10 @@ jobs:
     - name: 下载固件源码(Clone Source Code)
       run: |
         df -hT $GITHUB_WORKSPACE
-        ls -al
+        # 获取固件所属的平台
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $OPENWRT_PATH/.config | tr '[:lower:]' '[:upper:]')
+        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
+        echo "编译的固件所属平台为：$WRT_TARGET"
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ls -al
         cd openwrt
@@ -160,10 +155,6 @@ jobs:
       run: |
         ls -al
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
-        # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $OPENWRT_PATH/.config | tr '[:lower:]' '[:upper:]')
-        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
-        echo "编译的固件所属平台为：$WRT_TARGET"
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
