@@ -35,7 +35,7 @@ jobs:
     - name: 下载固件源码(Clone Source Code)
       run: |
         df -hT $GITHUB_WORKSPACE
-        
+        ls -al
         cp $GITHUB_WORKSPACE/ipq6000-re-ss-01.dts workdir/
         cd workdir
         cat ipq6000-re-ss-01.dts 
