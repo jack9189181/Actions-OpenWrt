@@ -36,49 +36,11 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        docker rmi $(docker images -q)
-        sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android $AGENT_TOOLSDIRECTORY
-
-    - name: Combine Disks
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 4096
-        # remove-dotnet: 'true'
-        # remove-android: 'true'
-        # remove-haskell: 'true'
-        # remove-codeql: 'true'
-        # remove-docker-images: 'true'
-
-    - name: Check Space Usage
-      if: (!cancelled())
-      run: df -hT
-
-    - name: 初始化编译环境(Initialization Environment)
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo -E apt -yqq update
-        sudo -E apt -yqq full-upgrade
-        sudo -E apt -yqq autoremove --purge
-        sudo -E apt -yqq autoclean
-        sudo -E apt -yqq clean
-        sudo -E apt -yqq install dos2unix libfuse-dev
-        sudo bash -c 'bash <(curl -sL https://build-scripts.immortalwrt.org/init_build_environment.sh)'
-        sudo -E systemctl daemon-reload
-        sudo -E timedatectl set-timezone "Asia/Shanghai"
-        sudo mkdir -p ./workdir
-        sudo chown $USER:$GROUPS ./workdir
-        # sudo mkdir -p /mnt/workdir
-        # sudo chown $USER:$USER /mnt/workdir
-        
-        # 获取固件所属的平台
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
-        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
-        echo "编译的固件所属平台为：$WRT_TARGET"
-        pwd
-
-    - name: Check Space Usage
-      if: (!cancelled())
-      run: df -hT
+        sudo mkdir -p /workdir
+        sudo chown $USER:$USER /workdir
+        sudo ln -s /workdir $GITHUB_WORKSPACE/workdir
+        cp $GITHUB_WORKSPACE/ipq6000-re-ss-01.dts workdir
+        cd workdir
+        cat ipq6000-re-ss-01.dts 
+        sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "ipq6000-re-ss-01.dts"
+        cat ipq6000-re-ss-01.dts
