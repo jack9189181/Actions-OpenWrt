@@ -32,14 +32,11 @@ jobs:
         echo "--------------------------硬盘信息--------------------------"
         echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
 
-    - name: Initialization Environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
+    - name: 下载固件源码(Clone Source Code)
       run: |
-        sudo mkdir -p /workdir
-        sudo chown $USER:$USER /workdir
-        sudo ln -s /workdir $GITHUB_WORKSPACE/workdir
-        cp $GITHUB_WORKSPACE/ipq6000-re-ss-01.dts workdir
+        df -hT $GITHUB_WORKSPACE
+        
+        cp $GITHUB_WORKSPACE/ipq6000-re-ss-01.dts workdir/
         cd workdir
         cat ipq6000-re-ss-01.dts 
         sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "ipq6000-re-ss-01.dts"
