@@ -155,6 +155,7 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
+        sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 是否编译DOCKER(DockerMan)
