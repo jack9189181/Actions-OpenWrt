@@ -54,6 +54,8 @@ UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-24.10"
 # UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
 # UPDATE_PACKAGE "ssr-plus" "fw876/helloworld" "master"
 UPDATE_PACKAGE "istore" "linkease/istore" "main"
+UPDATE_PACKAGE "quickstart" "kenzok8/small-package/tree/main/luci-app-quickstart" "main"
+UPDATE_PACKAGE "istorex" "kenzok8/small-package/tree/main/luci-app-istorex" "main"
 UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
 # UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 
