@@ -25,7 +25,7 @@ on:
         required: true
         default: 'philips_ly1800'
         options:
-          - jdcloud_re-ss-01
+          - philips_ly1800
       LAN_IP:
         description: '路由器登录地址'
         required: true
