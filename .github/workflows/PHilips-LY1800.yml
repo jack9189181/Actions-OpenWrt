@@ -1,40 +1,51 @@
-name: WRT-CORE
+#CI项目
+name: PHilips-LY1800
+
+#CI计划
 on:
-  workflow_call:
+  repository_dispatch:
+  workflow_dispatch:
     inputs:
-      OPENWRT_NAME:
+      SOURCE_URL:
+        type: choice
+        description: '源码'
         required: true
-        type: string
-      FEEDS_CONF:
+        default: 'https://github.com/VIKINGYFY/immortalwrt'
+        options:
+          - https://github.com/VIKINGYFY/immortalwrt
+          - https://github.com/LiBwrt/openwrt-6.x
+      BRANCH:
+        description: '分支(请输入正确的分支)'
         required: true
+        default: 'main'
         type: string
-      UPLOAD_TAG_NAME:
+      CONFIG_DEVICE:
+        type: choice
+        description: '设备'
         required: true
-        type: string
-      REPO_URL:
+        default: 'philips_ly1800'
+        options:
+          - jdcloud_re-ss-01
+      LAN_IP:
+        description: '路由器登录地址'
         required: true
-        type: string
-      REPO_BRANCH:
+        default: '192.168.8.1'
+      NO_WIRELESS:
+        description: 'Not build WIFI'
         required: true
-        type: string
-      CONFIG_FILE:
+        default: flase
+        type: boolean
+      NO_DOCKERMAN:
+        description: 'Not build luci-app-dockerman'
         required: true
-        type: string
-      SET_IP:
-        required: true
-        type: string
-      NO_WIFI: 
-        required: true
-        type: string
-      NO_DOCKER: 
-        required: true
-        type: string
-      DIY_P1_SH:
-        required: true
-        type: string
-      DIY_P2_SH:
-        required: true
-        type: string
+        default: true
+        type: boolean
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+#  schedule:
+#    - cron: 0 16 * * *
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -54,7 +65,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
-jobs:
+  jobs:
   build:
     runs-on: ubuntu-22.04
 
@@ -155,6 +166,7 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
         chmod +x $DIY_P2_SH
         cd $OPENWRT_PATH
+        sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 是否编译DOCKER(DockerMan)
