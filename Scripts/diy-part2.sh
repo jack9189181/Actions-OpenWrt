@@ -34,6 +34,7 @@ fi
 samba4_path="$BUILD_DIR/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
 if [ -f "$samba4_path" ]; then
 	sed -i 's/nas/services/g' "$samba4_path"
+	echo "luci-app-samba4 has been fixed!"
 fi
 
 # 修改opkg软件源
