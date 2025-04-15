@@ -24,7 +24,7 @@ fi
 #修改argon主题字体和颜色
 if [ -d "./package/luci-theme-argon" ]; then
 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./package/luci-theme-argon -type f -iname "*.css")
-	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-app-argon-config/root/etc/config/argon
+	sed -i "s/primary '.*'/primary '#5ba19b'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-app-argon-config/root/etc/config/argon
 	echo "theme-argon has been fixed!"
 else
 	echo "theme is not fixed!"
