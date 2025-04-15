@@ -47,3 +47,12 @@ jobs:
         chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
         $GITHUB_WORKSPACE/Scripts/Packages.sh
         ls -al
+        echo "下面显示argon的目录"
+        cd luci-theme-argon
+        ls -al
+        echo "下面显示lucky的目录"
+        cd ../luci-app-lucky
+        ls -al
+        echo "下面显示small的目录"
+        cd ../small
+        ls -al
