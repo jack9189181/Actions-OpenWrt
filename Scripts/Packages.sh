@@ -123,6 +123,7 @@ TARGET_DIR="small"
 PACKAGES=(
   "luci-app-istorex"
   "luci-app-quickstart"
+  "quickstart"
 )
 
 # 克隆仓库但不检出内容
