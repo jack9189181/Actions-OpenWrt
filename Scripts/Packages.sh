@@ -114,20 +114,31 @@ UPDATE_VERSION() {
 # UPDATE_VERSION "sing-box"
 # UPDATE_VERSION "tailscale"
 
-# 设置目标仓库和路径
+
+# 仓库地址
 REPO_URL="https://github.com/kenzok8/small-package.git"
 TARGET_DIR="small"
-PACKAGE_PATH="luci-app-istorex"
 
-# 创建目标目录并进入
+# 要拉取的插件路径
+PACKAGES=(
+  "luci-app-istorex"
+  "luci-app-quickstart"
+)
+
+# 克隆仓库但不检出内容
 git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
 cd "$TARGET_DIR" || exit 1
 
-# 初始化 sparse-checkout，仅拉取指定路径
+# 初始化 sparse-checkout
 git sparse-checkout init --cone
-git sparse-checkout set "luci-app-istorex"
+
+# 设置要检出的路径
+git sparse-checkout set "${PACKAGES[@]}"
+
+# 检出目标文件
 git checkout
-git sparse-checkout init --cone
-git sparse-checkout set "luci-app-quickstart"
-git checkout
-echo "✅ luci-app-istorex 已下载到 $TARGET_DIR/$PACKAGE_PATH"
+
+echo "✅ 以下插件已成功拉取到 $TARGET_DIR/:"
+for pkg in "${PACKAGES[@]}"; do
+  echo "  - $pkg"
+done
