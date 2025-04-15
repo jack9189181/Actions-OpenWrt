@@ -126,6 +126,7 @@ cd "$TARGET_DIR" || exit 1
 # 初始化 sparse-checkout，仅拉取指定路径
 git sparse-checkout init --cone
 git sparse-checkout set "luci-app-istorex"
+git checkout
 git sparse-checkout set "luci-app-quickstart"
 git checkout
 echo "✅ luci-app-istorex 已下载到 $TARGET_DIR/$PACKAGE_PATH"
