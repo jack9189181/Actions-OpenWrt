@@ -54,8 +54,6 @@ UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-24.10"
 # UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
 # UPDATE_PACKAGE "ssr-plus" "fw876/helloworld" "master"
 UPDATE_PACKAGE "istore" "linkease/istore" "main"
-UPDATE_PACKAGE "quickstart" "kenzok8/small-package/tree/main/luci-app-quickstart" "main"
-UPDATE_PACKAGE "istorex" "kenzok8/small-package/tree/main/luci-app-istorex" "main"
 UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
 # UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 
@@ -115,3 +113,18 @@ UPDATE_VERSION() {
 #UPDATE_VERSION "软件包名" "测试版，true，可选，默认为否"
 # UPDATE_VERSION "sing-box"
 # UPDATE_VERSION "tailscale"
+
+# 设置目标仓库和路径
+REPO_URL="https://github.com/kenzok8/small-package.git"
+TARGET_DIR="small"
+PACKAGE_PATH="luci-app-istorex"
+
+# 创建目标目录并进入
+git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
+cd "$TARGET_DIR" || exit 1
+
+# 初始化 sparse-checkout，仅拉取指定路径
+git sparse-checkout init --cone
+git sparse-checkout set "$PACKAGE_PATH"
+git checkout
+echo "✅ luci-app-istorex 已下载到 $TARGET_DIR/$PACKAGE_PATH"

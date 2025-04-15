@@ -41,6 +41,9 @@ jobs:
         ls -al
         # cp $GITHUB_WORKSPACE/ipq6000-re-ss-01.dts workdir/
         # cd workdir
-        cat ipq6000-re-ss-01.dts 
-        sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "ipq6000-re-ss-01.dts"
-        cat ipq6000-re-ss-01.dts
+        # cat ipq6000-re-ss-01.dts 
+        # sed -i "s/\(model *= *\"\)[^\"]*\(\"\)/\1PHilips LY-1800\2/" "ipq6000-re-ss-01.dts"
+        # cat ipq6000-re-ss-01.dts
+        chmod +x $GITHUB_WORKSPACE/Scripts/Packages.sh
+        $GITHUB_WORKSPACE/Scripts/Packages.sh
+        ls -al
