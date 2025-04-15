@@ -117,7 +117,7 @@ UPDATE_VERSION() {
 
 # 仓库地址
 REPO_URL="https://github.com/kenzok8/small-package.git"
-# TARGET_DIR="small"
+# TARGET_DIR=".\"
 
 # 要拉取的插件路径
 PACKAGES=(
@@ -126,7 +126,7 @@ PACKAGES=(
 )
 
 # 克隆仓库但不检出内容
-git clone --filter=blob:none --no-checkout "$REPO_URL"
+git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
 # cd "$TARGET_DIR" || exit 1
 
 # 初始化 sparse-checkout
