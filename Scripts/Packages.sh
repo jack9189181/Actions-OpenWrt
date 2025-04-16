@@ -47,8 +47,6 @@ UPDATE_PACKAGE() {
 # UPDATE_PACKAGE "包名" "项目地址" "项目分支" "pkg/name，可选，pkg为从大杂烩中单独提取包名插件；name为重命名为包名"
 # UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-24.10"
 # UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "js"
-UPDATE_PACKAGE "argon" "jerrykuku/luci-theme-argon" "master"
-UPDATE_PACKAGE "argon" "jerrykuku/luci-app-argon-config" "master"
 
 # UPDATE_PACKAGE "homeproxy" "VIKINGYFY/homeproxy" "main"
 # UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
@@ -65,7 +63,9 @@ UPDATE_PACKAGE "argon" "jerrykuku/luci-app-argon-config" "master"
 # UPDATE_PACKAGE "qmodem" "FUjr/modem_feeds" "main"
 # UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "main" "" "luci-app-timewol luci-app-wolplus"
 # UPDATE_PACKAGE "vnt" "lmq8267/luci-app-vnt" "main"
-UPDATE_PACKAGE "istore" "linkease/istore" "main"
+# UPDATE_PACKAGE "istore" "linkease/istore" "main"
+UPDATE_PACKAGE "argon" "jerrykuku/luci-theme-argon" "master"
+UPDATE_PACKAGE "argon" "jerrykuku/luci-app-argon-config" "master"
 UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
 # if [[ $WRT_REPO != *"immortalwrt"* ]]; then
 # 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
@@ -117,31 +117,31 @@ UPDATE_VERSION() {
 # UPDATE_VERSION "tailscale"
 
 
-# 仓库地址
-REPO_URL="https://github.com/kenzok8/small-package.git"
-TARGET_DIR="small"
+# # 从small-package拉取插件
+# REPO_URL="https://github.com/kenzok8/small-package.git"
+# TARGET_DIR="small"
 
-# 要拉取的插件路径
-PACKAGES=(
-  "luci-app-istorex"
-  "luci-app-quickstart"
-  "quickstart"
-)
+# # 要拉取的插件路径
+# PACKAGES=(
+#   "luci-app-istorex"
+#   "luci-app-quickstart"
+#   "quickstart"
+# )
 
-# 克隆仓库但不检出内容
-git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
-cd "$TARGET_DIR" || exit 1
+# # 克隆仓库但不检出内容
+# git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
+# cd "$TARGET_DIR" || exit 1
 
-# 初始化 sparse-checkout
-git sparse-checkout init --cone
+# # 初始化 sparse-checkout
+# git sparse-checkout init --cone
 
-# 设置要检出的路径
-git sparse-checkout set "${PACKAGES[@]}"
+# # 设置要检出的路径
+# git sparse-checkout set "${PACKAGES[@]}"
 
-# 检出目标文件
-git checkout
+# # 检出目标文件
+# git checkout
 
-echo "✅ 以下插件已成功拉取到 $TARGET_DIR/:"
-for pkg in "${PACKAGES[@]}"; do
-  echo "  - $pkg"
-done
+# echo "✅ 以下插件已成功拉取到 $TARGET_DIR/:"
+# for pkg in "${PACKAGES[@]}"; do
+#   echo "  - $pkg"
+# done

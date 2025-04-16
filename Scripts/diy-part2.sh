@@ -24,18 +24,18 @@ fi
 #修改argon主题字体和颜色
 if [ -d "./package/luci-theme-argon" ]; then
 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./package/luci-theme-argon -type f -iname "*.css")
-	sed -i "s/primary '.*'/primary '#5ba19b'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-app-argon-config/root/etc/config/argon
+	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-app-argon-config/root/etc/config/argon
 	echo "theme-argon has been fixed!"
 else
 	echo "theme is not fixed!"
 fi
 
-#修改luci-app-samba4的菜单
-samba4_path="$BUILD_DIR/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
-if [ -f "$samba4_path" ]; then
-	sed -i 's/nas/services/g' "$samba4_path"
-	echo "luci-app-samba4 has been fixed!"
-fi
+# #修改luci-app-samba4的菜单
+# samba4_path="$OPENWRT_PATH/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
+# if [ -f "$samba4_path" ]; then
+# 	sed -i 's/nas/services/g' "$samba4_path"
+# 	echo "luci-app-samba4 has been fixed!"
+# fi
 
 # 修改opkg软件源
 emortal_def_dir="$OPENWRT_PATH/package/emortal/default-settings"
