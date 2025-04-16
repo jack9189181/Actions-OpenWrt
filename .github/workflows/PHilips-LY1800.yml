@@ -51,7 +51,7 @@ env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   OPENWRT_NAME: WRT
   FEEDS_CONF: feeds.conf.default
-  UPLOAD_TAG_NAME: ${{github.event.inputs.CONFIG_DEVICE}}
+  UPLOAD_TAG_NAME: PHilips-LY1800
   REPO_URL: ${{github.event.inputs.SOURCE_URL}}
   REPO_BRANCH: ${{github.event.inputs.BRANCH}}
   CONFIG_FILE: Config/${{github.event.inputs.CONFIG_DEVICE}}.config
