@@ -78,7 +78,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	# NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	NSS_DRV="$OPENWRT_PATH/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	if [ -f "$NSS_DRV" ]; then
-		sed -i 's/START=.*/START=88/g' $NSS_DRV
+		sed -i 's/START=.*/START=85/g' $NSS_DRV
 		echo "qca-nss-drv has been fixed!"
 	else
 		echo "err"
@@ -86,7 +86,7 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	#修改qca-nss-pbuf启动顺序
 	NSS_PBUF="$OPENWRT_PATH/package/kernel/mac80211/files/qca-nss-pbuf.init"
 	if [ -f "$NSS_PBUF" ]; then
-		sed -i 's/START=.*/START=89/g' $NSS_PBUF
+		sed -i 's/START=.*/START=86/g' $NSS_PBUF
 		echo "qca-nss-pbuf has been fixed!"
 	else
 		echo "err"
