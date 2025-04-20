@@ -118,7 +118,7 @@ UPDATE_VERSION() {
 
 
 # 从small-package拉取插件
-REPO_URL="https://kkgithub.com/shidahuilang/openwrt-package"
+REPO_URL="https://github.com/shidahuilang/openwrt-package.git"
 TARGET_DIR="small"
 
 # 要拉取的插件路径
