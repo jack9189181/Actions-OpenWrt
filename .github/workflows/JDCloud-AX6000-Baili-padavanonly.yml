@@ -100,6 +100,10 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
+        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
+        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
+        echo "编译的固件所属平台为：$WRT_TARGET"
+
     - name: 清理磁盘空间(Ubuntu)
       uses: jlumbroso/free-disk-space@main
       with:
@@ -121,10 +125,6 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
-        export WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' $CONFIG_FILE | tr '[:lower:]' '[:upper:]')
-        echo "WRT_TARGET=$WRT_TARGET" >> $GITHUB_ENV
-        echo "编译的固件所属平台为：$WRT_TARGET"
 
     - name: 加载feeds.conf.default & DIY_P1_SH
       run: |
