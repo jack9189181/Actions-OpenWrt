@@ -64,7 +64,7 @@ on:
 env:
   ###############手动修改##############
   OPENWRT_NAME: padavanonly
-  REPO_URL: https://github.com/jack9189181/immortalwrt-mt798x-24.10
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-24.10
   REPO_BRANCH: 2410
   FEEDS_CONF: JDCloud-AX6000-Baili-padavanonly/feeds.conf.default
   CONFIG_FILE: JDCloud-AX6000-Baili-padavanonly/.mtwifi-cfg.config
@@ -167,31 +167,31 @@ jobs:
     #         echo "Invalid IP address, use default."
     #     fi
 
-    - name: 设置WiFi驱动版本
-      run: |
-        cd openwrt
-        wifi_driver=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/^(v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-        firmware=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/.*fw-([0-9]{8}|default).*/\1/g')
-        if [ "$wifi_driver" == "v7.6.6.1" ]; then
-                sed -i 's/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7672=y/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7661=y/g' .config
-        fi
-        if [ "$firmware" == "default" ]; then
-                sed -i 's/CONFIG_MTK_MT_WIFI_MT7986_20240823=y/CONFIG_MTK_MT_WIFI_MT7986_DEFAULT_FIRMWARE=y/g' .config
-        else
-        	sed -i 's/CONFIG_MTK_MT_WIFI_MT7986_20240823=y/CONFIG_MTK_MT_WIFI_MT7986_${firmware}=y/g' .config
-        fi
-        echo "Use WiFi Driver: $wifi_driver-fw-$firmware"
+    # - name: 设置WiFi驱动版本
+    #   run: |
+    #     cd openwrt
+    #     wifi_driver=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/^(v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+    #     firmware=$(echo "${{ github.event.inputs.WIFI_DRIVER }}" | sed -E 's/.*fw-([0-9]{8}|default).*/\1/g')
+    #     if [ "$wifi_driver" == "v7.6.6.1" ]; then
+    #             sed -i 's/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7672=y/CONFIG_MTK_MT_WIFI_DRIVER_VERSION_7661=y/g' .config
+    #     fi
+    #     if [ "$firmware" == "default" ]; then
+    #             sed -i 's/CONFIG_MTK_MT_WIFI_MT7986_20240823=y/CONFIG_MTK_MT_WIFI_MT7986_DEFAULT_FIRMWARE=y/g' .config
+    #     else
+    #     	sed -i 's/CONFIG_MTK_MT_WIFI_MT7986_20240823=y/CONFIG_MTK_MT_WIFI_MT7986_${firmware}=y/g' .config
+    #     fi
+    #     echo "Use WiFi Driver: $wifi_driver-fw-$firmware"
 
-    - name: 设置交换机驱动
-      run: |
-        cd openwrt
-        if [ ${{ github.event.inputs.SW_DRIVER }} == 'DSA' ]; then
-                cp $GITHUB_WORKSPACE/JDCloud-AX6000-Baili-padavanonly/mt7986a-dsa-jdcloud-re-cp-03.dts target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7986a-jdcloud-re-cp-03.dts
-                sed -i '/jdcloud,re-cp-03)/ {n; /eth0/ {s/eth0/lan1 lan2 lan3 lan4/; n; /ucidef_add_switch/ d}}' target/linux/mediatek/mt7986/base-files/etc/board.d/02_network
-                echo "Use Switch Driver: DSA"
-        else
-                echo "Use Switch Driver: GSW"
-        fi
+    # - name: 设置交换机驱动
+    #   run: |
+    #     cd openwrt
+    #     if [ ${{ github.event.inputs.SW_DRIVER }} == 'DSA' ]; then
+    #             cp $GITHUB_WORKSPACE/JDCloud-AX6000-Baili-padavanonly/mt7986a-dsa-jdcloud-re-cp-03.dts target/linux/mediatek/files-5.4/arch/arm64/boot/dts/mediatek/mt7986a-jdcloud-re-cp-03.dts
+    #             sed -i '/jdcloud,re-cp-03)/ {n; /eth0/ {s/eth0/lan1 lan2 lan3 lan4/; n; /ucidef_add_switch/ d}}' target/linux/mediatek/mt7986/base-files/etc/board.d/02_network
+    #             echo "Use Switch Driver: DSA"
+    #     else
+    #             echo "Use Switch Driver: GSW"
+    #     fi
 
     - name: 使用luci-app-mtk无线配置
       if: github.event.inputs.APP_MTK == 'true'

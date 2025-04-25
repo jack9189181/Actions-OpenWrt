@@ -14,6 +14,7 @@ on:
         options:
           - https://github.com/VIKINGYFY/immortalwrt
           - https://github.com/LiBwrt/openwrt-6.x
+          - https://github.com/NekokeCore/immortalwrt-mt798x-24.10
           - https://github.com/padavanonly/immortalwrt-mt798x-24.10
       BRANCH:
         description: '分支(请输入正确的分支)'
