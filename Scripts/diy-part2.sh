@@ -30,6 +30,14 @@ else
 	echo "theme is not fixed!"
 fi
 
+#修改aurora菜单式样
+if [ -d *"luci-app-aurora-config"* ]; then
+	echo " " && cd ./luci-app-aurora-config/
+
+	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./root/usr/share/aurora/ -type f -name "*.template")
+
+	cd $PKG_PATH && echo "theme-aurora has been fixed!"
+fi
 # #修改luci-app-samba4的菜单
 # samba4_path="$OPENWRT_PATH/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
 # if [ -f "$samba4_path" ]; then
@@ -37,27 +45,27 @@ fi
 # 	echo "luci-app-samba4 has been fixed!"
 # fi
 
-# 修改opkg软件源
-emortal_def_dir="$OPENWRT_PATH/package/emortal/default-settings"
-distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
-if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
-    cat <<'EOF' >"$distfeeds_conf"
-src/gz openwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base/
-src/gz openwrt_luci https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/luci/
-src/gz openwrt_packages https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/packages/
-src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/routing/
-src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
-EOF
-    sed -i "/define Package\/default-settings\/install/a\\
-\\t\$(INSTALL_DIR) \$(1)/etc\\n\
-\t\$(INSTALL_DATA) ./files/99-distfeeds.conf \$(1)/etc/99-distfeeds.conf\n" $emortal_def_dir/Makefile
-    sed -i "/exit 0/i\\
-[ -f \'/etc/99-distfeeds.conf\' ] && mv \'/etc/99-distfeeds.conf\' \'/etc/opkg/distfeeds.conf\'\n\
-sed -ri \'/check_signature/s@^[^#]@#&@\' /etc/opkg.conf\n" $emortal_def_dir/files/99-default-settings
-	echo "已修改opkg软件源."
-else
-	echo "软件源未修改成功"
-fi
+# # 修改opkg软件源
+# emortal_def_dir="$OPENWRT_PATH/package/emortal/default-settings"
+# distfeeds_conf="$emortal_def_dir/files/99-distfeeds.conf"
+# if [ -d "$emortal_def_dir" ] && [ ! -f "$distfeeds_conf" ]; then
+#     cat <<'EOF' >"$distfeeds_conf"
+# src/gz openwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base/
+# src/gz openwrt_luci https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/luci/
+# src/gz openwrt_packages https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/packages/
+# src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/routing/
+# src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
+# EOF
+#     sed -i "/define Package\/default-settings\/install/a\\
+# \\t\$(INSTALL_DIR) \$(1)/etc\\n\
+# \t\$(INSTALL_DATA) ./files/99-distfeeds.conf \$(1)/etc/99-distfeeds.conf\n" $emortal_def_dir/Makefile
+#     sed -i "/exit 0/i\\
+# [ -f \'/etc/99-distfeeds.conf\' ] && mv \'/etc/99-distfeeds.conf\' \'/etc/opkg/distfeeds.conf\'\n\
+# sed -ri \'/check_signature/s@^[^#]@#&@\' /etc/opkg.conf\n" $emortal_def_dir/files/99-default-settings
+# 	echo "已修改opkg软件源."
+# else
+# 	echo "软件源未修改成功"
+# fi
 
 #高通平台调整
 if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
@@ -68,12 +76,15 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	# echo "CONFIG_NSS_FIRMWARE_VERSION_11_4=n" >> ./.config
 	echo "CONFIG_NSS_FIRMWARE_VERSION_12_5=y" >> ./.config
 	echo "NSS版本设置成功!"
+	#其他调整
+	echo "CONFIG_PACKAGE_kmod-usb-serial-qualcomm=y" >> ./.config
 	#无WIFI配置调整Q6大小
 	if [[ $NO_WIFI == "true" ]]; then
 		DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
 		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
 		echo "无WIFI配置调整Q6成功!"
 	fi
+
 	#修改qca-nss-drv启动顺序
 	# NSS_DRV="$GITHUB_WORKSPACE/openwrt/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
 	NSS_DRV="$OPENWRT_PATH/package/feeds/nss_packages/qca-nss-drv/files/qca-nss-drv.init"
