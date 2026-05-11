@@ -45,36 +45,40 @@ UPDATE_PACKAGE() {
 # UPDATE_PACKAGE "open-app-filter" "destan19/OpenAppFilter" "master" "" "luci-app-appfilter oaf" 这样会把原有的open-app-filter，luci-app-appfilter，oaf相关组件删除，不会出现coremark错误。
 
 # UPDATE_PACKAGE "包名" "项目地址" "项目分支" "pkg/name，可选，pkg为从大杂烩中单独提取包名插件；name为重命名为包名"
-# UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-25.12"
-# UPDATE_PACKAGE "aurora" "eamonxg/luci-theme-aurora" "master"
-# UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "js"
-
-# UPDATE_PACKAGE "homeproxy" "VIKINGYFY/homeproxy" "main"
-# UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
-# UPDATE_PACKAGE "openclash" "vernesong/OpenClash" "dev" "pkg"
-# UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
-# UPDATE_PACKAGE "ssr-plus" "fw876/helloworld" "master"
-
-# UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
-
-# UPDATE_PACKAGE "alist" "sbwml/luci-app-alist" "main"
-# UPDATE_PACKAGE "easytier" "EasyTier/luci-app-easytier" "main"
-# UPDATE_PACKAGE "gecoosac" "lwb1978/openwrt-gecoosac" "main"
-# UPDATE_PACKAGE "mosdns" "sbwml/luci-app-mosdns" "v5" "" "v2dat"
-# UPDATE_PACKAGE "qmodem" "FUjr/modem_feeds" "main"
-# UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "main" "" "luci-app-timewol luci-app-wolplus"
-# UPDATE_PACKAGE "vnt" "lmq8267/luci-app-vnt" "main"
+UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-25.12"
 UPDATE_PACKAGE "aurora" "eamonxg/luci-theme-aurora" "master"
 UPDATE_PACKAGE "aurora-config" "eamonxg/luci-app-aurora-config" "master"
-UPDATE_PACKAGE "istore" "linkease/istore" "main"
-UPDATE_PACKAGE "argon" "jerrykuku/luci-theme-argon" "master"
-UPDATE_PACKAGE "argon" "jerrykuku/luci-app-argon-config" "master"
-UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
+UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "master"
+UPDATE_PACKAGE "kucat-config" "sirpdboy/luci-app-kucat-config" "master"
+
+UPDATE_PACKAGE "homeproxy" "VIKINGYFY/homeproxy" "main"
+UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
+UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
 UPDATE_PACKAGE "openclash" "vernesong/OpenClash" "dev" "pkg"
 UPDATE_PACKAGE "passwall" "Openwrt-Passwall/openwrt-passwall" "main" "pkg"
-# if [[ $WRT_REPO != *"immortalwrt"* ]]; then
-# 	UPDATE_PACKAGE "qmi-wwan" "immortalwrt/wwan-packages" "master" "pkg"
-# fi
+UPDATE_PACKAGE "passwall2" "Openwrt-Passwall/openwrt-passwall2" "main" "pkg"
+
+UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
+
+UPDATE_PACKAGE "athena-led" "unraveloop/JDC-AX6600-Athena-LED-Controller" "main"
+UPDATE_PACKAGE "ddns-go" "sirpdboy/luci-app-ddns-go" "main"
+UPDATE_PACKAGE "diskman" "sbwml/luci-app-diskman" "main"
+UPDATE_PACKAGE "diskmanager" "4IceG/luci-app-mini-diskmanager" "main"
+UPDATE_PACKAGE "easytier" "EasyTier/luci-app-easytier" "main"
+UPDATE_PACKAGE "mosdns" "sbwml/luci-app-mosdns" "v5" "" "v2dat"
+UPDATE_PACKAGE "netspeedtest" "sirpdboy/netspeedtest" "main" "" "homebox ookla-speedtest"
+UPDATE_PACKAGE "netwizard" "sirpdboy/luci-app-netwizard" "main"
+UPDATE_PACKAGE "openlist2" "sbwml/luci-app-openlist2" "main"
+UPDATE_PACKAGE "partexp" "sirpdboy/luci-app-partexp" "main"
+UPDATE_PACKAGE "qbittorrent" "sbwml/luci-app-qbittorrent" "master" "" "qt6base qt6tools rblibtorrent"
+UPDATE_PACKAGE "qmodem" "FUjr/QModem" "main"
+UPDATE_PACKAGE "quickfile" "sbwml/luci-app-quickfile" "main"
+UPDATE_PACKAGE "timecontrol" "sirpdboy/luci-app-timecontrol" "main"
+UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "main" "" "gecoosac luci-app-timewol luci-app-wolplus"
+UPDATE_PACKAGE "vnt" "lmq8267/luci-app-vnt" "main"
+# 自己增加的插件，保持更新
+UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
+# UPDATE_PACKAGE "istore" "linkease/istore" "main"
 
 #更新软件包版本
 UPDATE_VERSION() {
@@ -120,61 +124,3 @@ UPDATE_VERSION() {
 #UPDATE_VERSION "软件包名" "测试版，true，可选，默认为否"
 # UPDATE_VERSION "sing-box"
 # UPDATE_VERSION "tailscale"
-
-
-# # 从small-package拉取插件
-# REPO_URL="https://github.com/shidahuilang/openwrt-package.git"
-# TARGET_DIR="small"
-
-# # 要拉取的插件路径
-# PACKAGES=(
-#   "luci-app-istorex"
-#   "luci-app-quickstart"
-# #   "quickstart"
-# )
-
-# # 克隆仓库但不检出内容
-# git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
-# cd "$TARGET_DIR" || exit 1
-
-# # 初始化 sparse-checkout
-# git sparse-checkout init --cone
-
-# # 设置要检出的路径
-# git sparse-checkout set "${PACKAGES[@]}"
-
-# # 检出目标文件
-# git checkout
-
-# echo "✅ 以下插件已成功拉取到 $TARGET_DIR/:"
-# for pkg in "${PACKAGES[@]}"; do
-#   echo "  - $pkg"
-# done
-
-# REPO_URL="https://github.com/kenzok8/small-package.git"
-# TARGET_DIR="small"
-
-# # 要拉取的插件路径
-# PACKAGES=(
-# #   "luci-app-istorex"
-# #   "luci-app-quickstart"
-#   "quickstart"
-# )
-
-# # 克隆仓库但不检出内容
-# git clone --filter=blob:none --no-checkout "$REPO_URL" "$TARGET_DIR"
-# cd "$TARGET_DIR" || exit 1
-
-# # 初始化 sparse-checkout
-# git sparse-checkout init --cone
-
-# # 设置要检出的路径
-# git sparse-checkout set "${PACKAGES[@]}"
-
-# # 检出目标文件
-# git checkout
-
-# echo "✅ 以下插件已成功拉取到 $TARGET_DIR/:"
-# for pkg in "${PACKAGES[@]}"; do
-#   echo "  - $pkg"
-# done

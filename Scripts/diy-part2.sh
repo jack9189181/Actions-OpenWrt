@@ -31,13 +31,19 @@ else
 fi
 
 #修改aurora菜单式样
-if [ -d *"luci-app-aurora-config"* ]; then
-	echo " " && cd ./luci-app-aurora-config/
-
-	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./root/usr/share/aurora/ -type f -name "*.template")
-
-	cd $PKG_PATH && echo "theme-aurora has been fixed!"
+if [ -d *"./package/luci-app-aurora-config"* ]; then
+	# echo " " && cd ./luci-app-aurora-config/
+	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./package/luci-app-aurora-config/root/usr/share/aurora/ -type f -name "*.template")
+	echo "theme-aurora has been fixed!"
 fi
+
+#修改mini-diskmanager菜单位置
+if [ -d *"./package/luci-app-mini-diskmanager"* ]; then
+	# echo " " && cd ./luci-app-mini-diskmanager/
+	sed -i "s/services/system/g" ./package/luci-app-mini-diskmanager/root/usr/share/luci/menu.d/luci-app-mini-diskmanager.json
+	echo "mini-diskmanager has been fixed!"
+fi
+
 # #修改luci-app-samba4的菜单
 # samba4_path="$OPENWRT_PATH/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
 # if [ -f "$samba4_path" ]; then
@@ -80,8 +86,10 @@ if [[ $WRT_TARGET == *"QUALCOMMAX"* ]]; then
 	echo "CONFIG_PACKAGE_kmod-usb-serial-qualcomm=y" >> ./.config
 	#无WIFI配置调整Q6大小
 	if [[ $NO_WIFI == "true" ]]; then
-		DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
+		# DTS_PATH="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/"
+		DTS_PATH="./target/linux/qualcommax/dts/"
 		find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\)\.dtsi/ipq\1-nowifi.dtsi/g' {} +
+		# find $DTS_PATH -type f ! -iname '*nowifi*' -exec sed -i 's/ipq\(6018\|8074\).dtsi/ipq\1-nowifi.dtsi/g' {} +
 		echo "无WIFI配置调整Q6成功!"
 	fi
 
