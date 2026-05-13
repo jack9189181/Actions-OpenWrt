@@ -31,18 +31,29 @@ else
 fi
 
 #修改aurora菜单式样
-if [ -d *"./package/luci-app-aurora-config"* ]; then
-	# echo " " && cd ./luci-app-aurora-config/
-	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./package/luci-app-aurora-config/root/usr/share/aurora/ -type f -name "*.template")
+# if [ -d *"./package/luci-app-aurora-config"* ]; then
+# 	# echo " " && cd ./luci-app-aurora-config/
+# 	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./package/luci-app-aurora-config/root/usr/share/aurora/ -type f -name "*.template")
+# 	echo "theme-aurora has been fixed!"
+# fi
+
+AURORA_PATH=$(find ./package ./feeds -type d -name "luci-app-aurora-config" | head -n 1)
+if [ -n "$AURORA_PATH" ]; then
+	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" \
+	$(find "$AURORA_PATH/root/usr/share/aurora/" -type f -name "*.template")
+
 	echo "theme-aurora has been fixed!"
+else
+	echo "没找到 aurora 配置目录"
 fi
 
-#修改mini-diskmanager菜单位置
-if [ -d *"./package/luci-app-mini-diskmanager"* ]; then
-	# echo " " && cd ./luci-app-mini-diskmanager/
-	sed -i "s/services/system/g" ./package/luci-app-mini-diskmanager/root/usr/share/luci/menu.d/luci-app-mini-diskmanager.json
-	echo "mini-diskmanager has been fixed!"
-fi
+
+# #修改mini-diskmanager菜单位置
+# if [ -d *"./package/luci-app-mini-diskmanager"* ]; then
+# 	# echo " " && cd ./luci-app-mini-diskmanager/
+# 	sed -i "s/services/system/g" ./package/luci-app-mini-diskmanager/root/usr/share/luci/menu.d/luci-app-mini-diskmanager.json
+# 	echo "mini-diskmanager has been fixed!"
+# fi
 
 # #修改luci-app-samba4的菜单
 # samba4_path="$OPENWRT_PATH/feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json"
