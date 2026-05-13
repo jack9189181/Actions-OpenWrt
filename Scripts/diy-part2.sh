@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
-# 修改路由器登录地址
+# 1.修改路由器登录地址
 if [[ $SET_IP =~ ^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then
 	#修改immortalwrt.lan关联IP
 	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$SET_IP/g" $(find feeds/luci/modules/luci-mod-system -type f -name "flash.js")
@@ -21,10 +21,10 @@ else
 	echo "Invalid IP address, use default."
 fi
 
-# 修改主机名
+# 2.修改主机名
 sed -i "s/hostname='.*'/hostname='TY-WRT'/g" package/base-files/files/bin/config_generate
 
-#修改argon主题字体和颜色
+# 3.修改argon主题字体和颜色
 if [ -d "./package/luci-theme-argon" ]; then
 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./package/luci-theme-argon -type f -iname "*.css")
 	sed -i "s/primary '.*'/primary '#31a1a1'/; s/'0.2'/'0.5'/; s/'none'/'bing'/; s/'600'/'normal'/" ./package/luci-app-argon-config/root/etc/config/argon
@@ -33,13 +33,7 @@ else
 	echo "theme is not fixed!"
 fi
 
-#修改aurora菜单式样
-# if [ -d *"./package/luci-app-aurora-config"* ]; then
-# 	# echo " " && cd ./luci-app-aurora-config/
-# 	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" $(find ./package/luci-app-aurora-config/root/usr/share/aurora/ -type f -name "*.template")
-# 	echo "theme-aurora has been fixed!"
-# fi
-
+# 4.修改aurora菜单式样
 AURORA_PATH=$(find ./package ./feeds -type d -name "luci-app-aurora-config" | head -n 1)
 if [ -n "$AURORA_PATH" ]; then
 	sed -i "s/nav_submenu_type '.*'/nav_submenu_type 'boxed-dropdown'/g" \
@@ -48,6 +42,25 @@ if [ -n "$AURORA_PATH" ]; then
 	echo "theme-aurora has been fixed!"
 else
 	echo "没找到 aurora 配置目录"
+fi
+
+# 修改 dockerman 菜单位置
+DOCKERMAN_JSON=$(find ./package ./feeds -type f -name "luci-app-dockerman.json" | head -n 1)
+if [ -n "$DOCKERMAN_JSON" ]; then
+	sed -i 's#admin/services/dockerman#admin/dockerman#g' "$DOCKERMAN_JSON"
+	echo "dockerman menu moved to top menu!"
+else
+	echo "dockerman not found!"
+fi
+
+# 修改 mini-diskmanager 菜单位置
+MINI_DISK_JSON=$(find ./package ./feeds -type f -name "luci-app-mini-diskmanager.json" | head -n 1)
+
+if [ -n "$MINI_DISK_JSON" ]; then
+	sed -i 's#admin/services/#admin/system/#g' "$MINI_DISK_JSON"
+	echo "mini-diskmanager menu moved to system!"
+else
+	echo "mini-diskmanager not found!"
 fi
 
 
