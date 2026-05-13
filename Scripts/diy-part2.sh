@@ -21,6 +21,9 @@ else
 	echo "Invalid IP address, use default."
 fi
 
+# 修改主机名
+sed -i "s/hostname='.*'/hostname='TY-WRT'/g" package/base-files/files/bin/config_generate
+
 #修改argon主题字体和颜色
 if [ -d "./package/luci-theme-argon" ]; then
 	sed -i "/font-weight:/ { /important/! { /\/\*/! s/:.*/: var(--font-weight);/ } }" $(find ./package/luci-theme-argon -type f -iname "*.css")
