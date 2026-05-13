@@ -164,6 +164,30 @@ jobs:
         sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
         echo "固件不含Docker!"
 
+    - name: 是否编译DOCKER(DockerMan)
+      run: |
+        cd $OPENWRT_PATH
+
+        if [[ "$NO_DOCKER" == "true" ]]; then
+          echo "禁用 Docker..."
+
+          ./scripts/config --disable PACKAGE_luci-app-dockerman
+          ./scripts/config --disable PACKAGE_dockerd
+          ./scripts/config --disable PACKAGE_containerd
+          ./scripts/config --disable PACKAGE_runc
+
+          echo "固件不含 Docker!"
+        else
+          echo "启用 Docker..."
+
+          ./scripts/config --enable PACKAGE_luci-app-dockerman
+          ./scripts/config --enable PACKAGE_dockerd
+          ./scripts/config --enable PACKAGE_containerd
+          ./scripts/config --enable PACKAGE_runc
+
+          echo "已启用 Docker!"
+        fi
+        
     - name: SSH链接管理(SSH Manage)
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')

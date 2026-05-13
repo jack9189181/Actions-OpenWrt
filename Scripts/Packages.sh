@@ -77,7 +77,7 @@ UPDATE_PACKAGE "timecontrol" "sirpdboy/luci-app-timecontrol" "main"
 UPDATE_PACKAGE "viking" "VIKINGYFY/packages" "main" "" "gecoosac luci-app-timewol luci-app-wolplus"
 UPDATE_PACKAGE "vnt" "lmq8267/luci-app-vnt" "main"
 # 自己增加的插件，保持更新
-UPDATE_PACKAGE "lucky" "sirpdboy/luci-app-lucky" "main"
+UPDATE_PACKAGE "lucky" "gdy666/luci-app-lucky" "main"
 # UPDATE_PACKAGE "istore" "linkease/istore" "main"
 
 #更新软件包版本
