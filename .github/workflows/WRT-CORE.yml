@@ -157,13 +157,24 @@ jobs:
         cd $OPENWRT_PATH
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
+    # - name: 是否编译DOCKER(DockerMan)
+    #   if: env.NO_DOCKER == 'true'
+    #   run: |
+    #     cd $OPENWRT_PATH
+    #     sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
+    #     echo "固件不含Docker!"
     - name: 是否编译DOCKER(DockerMan)
-      if: env.NO_DOCKER == 'true'
       run: |
         cd $OPENWRT_PATH
-        sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
-        echo "固件不含Docker!"
-        
+
+        if [[ "$NO_DOCKER" == "true" ]]; then
+          sed -i '/CONFIG_PACKAGE_luci-app-dockerman=y/d' .config
+          echo "固件不含Docker!"
+        else
+          grep -q '^CONFIG_PACKAGE_luci-app-dockerman=y' .config || echo 'CONFIG_PACKAGE_luci-app-dockerman=y' >> .config
+          echo "已启用Docker!"
+        fi
+ 
     - name: SSH链接管理(SSH Manage)
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
